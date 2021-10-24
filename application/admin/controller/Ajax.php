@@ -313,7 +313,7 @@ class Ajax extends Backend
     }
 
     public function fanyongstyle(){
-        $categorylist = Db::name('fanyong_style')->field('name as id ,name')->select();
+        $categorylist = Db::name('xilie')->field('name as id ,name')->select();
         return $categorylist;
     }
 

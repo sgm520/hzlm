@@ -2,6 +2,7 @@
 
 namespace app\api\controller;
 
+use app\admin\model\Admin;
 use app\common\controller\Api;
 use app\common\library\Ems;
 use app\common\library\Sms;
@@ -108,6 +109,63 @@ class User extends Api
             Sms::flush($mobile, 'mobilelogin');
             $data = ['userinfo' => $this->auth->getUserinfo()];
             $this->success(__('Logged in successful'), $data);
+        } else {
+            $this->error($this->auth->getError());
+        }
+    }
+    /**
+     * 注册会员
+     *
+     * @ApiMethod (POST)
+     * @param string $username 用户名
+     * @param string $password 密码
+     * @param string $email    邮箱
+     * @param string $mobile   手机号
+     * @param string $code     验证码
+     */
+    public function register1()
+    {
+        $username = $this->request->post('username');
+        $password = $this->request->post('password');
+        $email = $this->request->post('email');
+        $mobile = $this->request->post('mobile');
+        $code = $this->request->post('code');
+
+        $admin=Admin::where('code',$code)->find();
+        $parent=\app\common\model\User::where('invite_code',$code)->find();
+
+        if(empty($admin) && empty($parent)){
+            $this->error(__('邀请码不正确'));
+        }
+        if (!$username || !$password) {
+            $this->error(__('Invalid parameters'));
+        }
+        if ($email && !Validate::is($email, "email")) {
+            $this->error(__('Email is incorrect'));
+        }
+        if ($mobile && !Validate::regex($mobile, "^1\d{10}$")) {
+            $this->error(__('Mobile is incorrect'));
+        }
+        $ret = Sms::check($mobile, $code, 'register');
+        if (!$ret) {
+            $this->error(__('Captcha is incorrect'));
+        }
+        $ret = $this->auth->register($username, $password, $email, $mobile, []);
+        if ($ret) {
+            $user=$this->auth->getUser();
+            $user->invite_code=make_coupon_card();
+            if($admin){
+                $user->agent_id=$admin['id']; //代理ID
+                $user->parent_id=$admin['id']; //上级id
+                $user->parent_path=$admin['code'];
+            }else{
+                $user->agent_id=$parent['agent_id']; //代理ID
+                $user->parent_id=$parent['id']; //上级id
+                $user->parent_path=$parent['invite_code'].','.$parent->parent_path;
+            }
+            $user->save();
+            $data = ['userinfo' => $this->auth->getUserinfo()];
+            $this->success(__('Sign up successful'), $data);
         } else {
             $this->error($this->auth->getError());
         }

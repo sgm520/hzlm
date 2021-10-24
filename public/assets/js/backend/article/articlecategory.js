@@ -29,6 +29,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                     [
                         {field: 'id', title: 'ID'},
                         {field: 'name', title: __('名称')},
+                        {field: 'image', title: __('logo'), events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.toggle,searchList: {1:'正常',0:'已下架'}},
                         {field: 'weight', title: __('排序'),operate: false},
                         {field: 'create_time', title: __('创建时间'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},

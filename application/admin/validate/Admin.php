@@ -12,9 +12,7 @@ class Admin extends Validate
      */
     protected $rule = [
         'username' => 'require|regex:\w{3,12}|unique:admin',
-        'nickname' => 'require',
         'password' => 'require|regex:\S{32}',
-        'email'    => 'require|email|unique:admin,email',
     ];
 
     /**
@@ -41,9 +39,7 @@ class Admin extends Validate
     {
         $this->field = [
             'username' => __('Username'),
-            'nickname' => __('Nickname'),
             'password' => __('Password'),
-            'email'    => __('Email'),
         ];
         $this->message = array_merge($this->message, [
             'username.regex' => __('Please input correct username'),

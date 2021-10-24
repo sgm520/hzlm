@@ -5,7 +5,8 @@ namespace app\common\model;
 
 
 use think\Model;
-use function Couchbase\defaultDecoder;
+use app\admin\controller\auth;
+use think\Session;
 
 class Fanyong extends Model
 {
@@ -17,17 +18,31 @@ class Fanyong extends Model
     protected $createTime = 'create_time';
     protected $updateTime = 'update_time';
     // 追加属性
-    protected $append = [
-    ];
+
     protected $type = [
-        'more'      =>  'json'
+        'more'      =>  'json',
+
     ];
 
-    public function style(){
-        return $this->belongsTo(FanyongStyle::class,'state','id',[],'LEFT')->setEagerlyType(0);;
+    public function xilie(){
+        return $this->belongsTo(Xilie::class,'state','id',[],'LEFT')->setEagerlyType(0);;
     }
 
+    public function getMoneyAttr($name)
+    {
+       if(Session::get('admin.id') !=1){
+            $other=FangyongPrice::where('product_id',$this->getAttr('id'))->where('user_id',Session::get('admin.id'))->find();
 
+
+            if($other){
+                return  $other->price;
+            }else{
+                return $this->value('money');
+            }
+       }else{
+           return $this->value('money');
+       }
+    }
 
 
 }

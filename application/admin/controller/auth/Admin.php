@@ -8,8 +8,16 @@ use app\common\controller\Backend;
 use fast\Random;
 use fast\Tree;
 use think\Db;
+use think\Response;
 use think\Validate;
-
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\QrCode as QrcodeLib;
 /**
  * 管理员管理
  *
@@ -60,6 +68,7 @@ class Admin extends Backend
         }
 
         $this->view->assign('groupdata', $groupdata);
+
         $this->assignconfig("admin", ['id' => $this->auth->id]);
     }
 
@@ -104,7 +113,13 @@ class Admin extends Backend
             foreach ($list as $k => &$v) {
                 $groups = isset($adminGroupName[$v['id']]) ? $adminGroupName[$v['id']] : [];
                 $v['groups'] = implode(',', array_keys($groups));
+                $v['visit_url'] = config('site.font_url').$v['code'];
+
+
+                // 直接显示二维码
                 $v['groups_text'] = implode(',', array_values($groups));
+
+
             }
             unset($v);
             $result = array("total" => $list->total(), "rows" => $list->items());
@@ -129,6 +144,7 @@ class Admin extends Backend
                         exception(__("Please input correct password"));
                     }
                     $params['salt'] = Random::alnum();
+                    $params['code'] = make_coupon_card();
                     $params['password'] = md5(md5($params['password']) . $params['salt']);
                     $params['avatar'] = '/assets/img/avatar.png'; //设置新管理员默认头像。
                     $result = $this->model->validate('Admin.add')->save($params);

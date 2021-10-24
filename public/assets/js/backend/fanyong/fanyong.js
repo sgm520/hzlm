@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function ($, undefined, Backend, Table, Form, Upload) {
+define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','editable'], function ($, undefined, Backend, Table, Form, Upload,editable) {
 
     var Controller = {
         index: function () {
@@ -31,12 +31,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                     },
                         {field: 'id', title: 'ID'},
                         {field: 'name', title: __('产品名称'),operate: 'LIKE'},
-                        {field: 'style.name', title: __('产品类型'),searchList: $.getJSON("ajax/fanyongstyle")},
-                        {field: 'money', title: __('结算佣金'), operate: false},
+                        {field: 'xilie.name', title: __('产品系列'),searchList: $.getJSON("ajax/fanyongstyle")},
+                        {field: 'money', title: __('结算佣金'), operate: false,editable:true},
                         {field: 'logo', title: __('logo'), events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
 
-                        {field: 'conditions', title: __('甲方'), operate: false},
-                        {field: 'conditions_day', title: __('结算周期'), operate: false},
+
 
                         {field: 'status', title: __('是否上架'), formatter: Table.api.formatter.toggle,searchList: {
                                 0:'已下架',
