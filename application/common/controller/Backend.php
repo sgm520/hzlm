@@ -194,7 +194,7 @@ class Backend extends Controller
 
         $site = Config::get("site");
 
-        $upload = \app\common\model\Config::upload();
+//        $upload = \app\common\model\Config::upload();
 
         // 上传信息配置后
         Hook::listen("upload_config_init", $upload);
