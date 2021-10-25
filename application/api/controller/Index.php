@@ -90,13 +90,22 @@ class Index extends Api
     public function fanyong()
     {
         $lable = $this->request->param("label");
+        $state = $this->request->param("state");
+        $page = $this->request->param("page",1);
+        $limit = $this->request->param("limit");
 
         if(empty($lable)){
             $map['lable']=$lable;
         }
+        if($state){
+            $map['state']=$lable;
+        }
         $map['status']=1;
         $fanyongModel = new Fanyong();
-        $list         = $fanyongModel->where($map)->order('list_order','desc')->select();
+        $list         = $fanyongModel->where($map)->order('list_order','desc')->paginate('',true,[
+            'page'=>$page,
+            'list_rows'=>$limit,
+        ]);
         $this->success(__('成功'), ['data'=>$list]);
     }
 
