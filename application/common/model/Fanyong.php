@@ -32,8 +32,6 @@ class Fanyong extends Model
     {
        if(Session::get('admin.id') !=1){
             $other=FangyongPrice::where('product_id',$this->getAttr('id'))->where('user_id',Session::get('admin.id'))->find();
-
-
             if($other){
                 return  $other->price;
             }else{
