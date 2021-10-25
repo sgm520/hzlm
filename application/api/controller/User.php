@@ -123,34 +123,34 @@ class User extends Api
      * @param string $mobile   手机号
      * @param string $code     验证码
      */
-    public function register1()
+    public function register()
     {
-        $username = $this->request->post('username');
         $password = $this->request->post('password');
-        $email = $this->request->post('email');
+        $re_password = $this->request->post('re_password');
         $mobile = $this->request->post('mobile');
+        $sms_code = $this->request->post('sms_code');
         $code = $this->request->post('code');
-
         $admin=Admin::where('code',$code)->find();
         $parent=\app\common\model\User::where('invite_code',$code)->find();
-
+        $username=$mobile;
         if(empty($admin) && empty($parent)){
             $this->error(__('邀请码不正确'));
         }
-        if (!$username || !$password) {
+        if (!$password) {
             $this->error(__('Invalid parameters'));
         }
-        if ($email && !Validate::is($email, "email")) {
-            $this->error(__('Email is incorrect'));
+        if($re_password !=$password){
+            $this->error(__('2次密码不正确'));
         }
+
         if ($mobile && !Validate::regex($mobile, "^1\d{10}$")) {
             $this->error(__('Mobile is incorrect'));
         }
-        $ret = Sms::check($mobile, $code, 'register');
+        $ret = Sms::check($mobile, $sms_code, 'register');
         if (!$ret) {
             $this->error(__('Captcha is incorrect'));
         }
-        $ret = $this->auth->register($username, $password, $email, $mobile, []);
+        $ret = $this->auth->register($username,$password, $mobile,[]);
         if ($ret) {
             $user=$this->auth->getUser();
             $user->invite_code=make_coupon_card();
@@ -181,7 +181,7 @@ class User extends Api
      * @param string $mobile   手机号
      * @param string $code     验证码
      */
-    public function register()
+    public function register1()
     {
         $username = $this->request->post('user_login');
         $password = $this->request->post('user_pass');

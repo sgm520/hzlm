@@ -22,6 +22,18 @@
     </div>
 
     <div class="form-group">
+        <label for="c-lable" class="control-label col-xs-12 col-sm-2">{:__('标签')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select id="c-lable" data-rule="required" class="form-control selectpicker" name="row[lable]">
+                {foreach name="Lable" item="vo"}
+                <option  value="{$vo.id}" {if $vo.id==$row.lable}selected{/if} >{$vo.name}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+
+    <div class="form-group">
         <label for="c-status" class="control-label col-xs-12 col-sm-2">{:__('上架状态')}:</label>
         <div class="col-xs-12 col-sm-8">
             <select id="c-status" data-rule="required" class="form-control selectpicker" name="row[status]">

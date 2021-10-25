@@ -18,10 +18,12 @@ use app\common\model\ArticleCategory;
 use app\common\model\Chaoshi;
 use app\common\model\ChaoshiCategory;
 use app\common\model\Chaoshigroup;
+use app\common\model\FangyongLabel;
 use app\common\model\Fanyong;
 use app\common\model\Gonggao;
 use app\common\model\SlideItem;
 use app\common\model\Version;
+use app\common\model\Xilie;
 use mysql_xdevapi\Table;
 use think\Db;
 
@@ -33,95 +35,6 @@ class Index extends Api
     protected $noNeedRight = '*';
 
 
-    public function block()
-    {
-        // foreach($data_ChaoshiCategory as $k=>$v){
-        //     $data_ChaoshiCategory[$v['id']] = $v;
-        // }
-
-        $data_ChaoshiCategory = ChaoshiCategory::where('state', 1)->order("list_order", "asc")->select()->toArray();
-
-        foreach ($data_ChaoshiCategory as $k => $v) {
-            $data_ChaoshiCategory[$k]['children'] = Chaoshi::where('status', 1)->where('category', $v['id'])->field('*,FROM_UNIXTIME(update_time,"%Y-%m-%d %H:%i:%s") update_time_text')->order("list_order", "asc")->select()->toArray();
-            // $data_ChaoshiCategory[$k]['children']['update_time_text'] = date('Y-m-d H:i:s',$v['children']['update_time']);
-        }
-        $this->success(__('获取成功'), $data_ChaoshiCategory);
-
-        $name = $this->request->param("name");
-        // $data_ChaoshiCategory=ChaoshiCategoryModel::where([])->field('id,name,logo')->select()->toArray();
-
-        if (!empty($name)) {
-            $data_Chaoshi = Chaoshi::where('status', 1)->where('name', 'like', "{$name}%")->order("list_order", "asc")->select()->toArray();
-
-            foreach ($data_Chaoshi as $k => $v) {
-                $catgory                              = ChaoshiCategory::where(['id' => $v['category']])->field('id cate,name cate_name,logo cate_logo')->find()->toArray();
-                $data_Chaoshi[$k]['cate']             = $catgory['cate'];
-                $data_Chaoshi[$k]['cate_name']        = $catgory['cate_name'];
-                $data_Chaoshi[$k]['cate_logo']        = $catgory['cate_logo'];
-                $data_Chaoshi[$k]['update_time_text'] = date('Y-m-d H:i:s', $v['update_time']);
-            }
-            $this->success(__('获取成功'), ['data'=>$data_Chaoshi]);
-
-
-        } else {
-            $data_Chaoshi = Chaoshi::where('status', 1)->select()->toArray();
-
-            foreach ($data_Chaoshi as $k => $v) {
-                $catgory                              = ChaoshiCategoryModel::where(['id' => $v['category']])->field('id cate,name cate_name,logo cate_logo')->find()->toArray();
-                $data_Chaoshi[$k]['cate']             = $catgory['cate'];
-                $data_Chaoshi[$k]['cate_name']        = $catgory['cate_name'];
-                $data_Chaoshi[$k]['cate_logo']        = $catgory['cate_logo'];
-                $data_Chaoshi[$k]['update_time_text'] = date('Y-m-d H:i:s', $v['update_time']);
-            }
-            $this->success(__('获取成功'), ['data'=>$data_Chaoshi]);
-
-        }
-
-
-        if (!empty($name)) {
-            $chaoshi = Chaoshi::field('ch.*,ca.name as category_name,ca.category as cate,ca.logo as cate_logo')
-                ->alias('ch')->join('chaoshi_category ca', 'ca.id = ch.category')
-                ->where("ch.status", 1)
-                ->where('ch.name', 'like', "{$name}%")
-                ->select();
-
-        } else {
-            $chaoshi = Chaoshi::field('ch.*,ca.name as category_name,ca.category as cate,ca.logo as cate_logo')
-                ->alias('ch')->join('chaoshi_category ca', 'ca.id = ch.category')
-                ->where("ch.status", 1)
-                ->select();
-        }
-
-
-        foreach ($chaoshi as $k => $v) {
-            $chaoshi[$k]['update_time_text'] = date('Y-m-d H:i:s', $v['update_time']);
-        }
-        $this->success(__('获取成功'), ['data'=>$data_Chaoshi]);
-    }
-
-    public function block123()
-    {
-        $name = $this->request->param("name");
-        if (!empty($name)) {
-            $chaoshi = ChaoshiModel::field('ch.*,ca.name as category_name,ca.category as cate,ca.logo as cate_logo')
-                ->alias('ch')->join('chaoshi_category ca', 'ca.id = ch.category')
-                ->where("ch.status", 1)
-                ->where('ch.name', 'like', "{$name}%")
-                ->select();
-        } else {
-            $chaoshi = ChaoshiModel::field('ch.*,ca.name as category_name,ca.category as cate,ca.logo as cate_logo')
-                ->alias('ch')->join('chaoshi_category ca', 'ca.id = ch.category')
-                ->where("ch.status", 1)
-                ->select();
-        }
-
-        foreach ($chaoshi as $k => $v) {
-            $chaoshi[$k]['update_time_text'] = date('Y-m-d H:i:s', $v['update_time']);
-        }
-
-        echo json_encode(["code" => 200, "data" => $chaoshi], JSON_UNESCAPED_UNICODE);
-        die;
-    }
 
     /**
      * 文章分类API
@@ -176,16 +89,15 @@ class Index extends Api
      */
     public function fanyong()
     {
-        $state = $this->request->param("state");
-        if (!empty($state)) {
-            $where        = ["state" => $state, "status" => 1];
-            $fanyongModel = new Fanyong();
-            $list         = $fanyongModel->where($where)->order('list_order','desc')->select();
-            $this->success(__('成功'), ['data'=>$list]);
-        } else {
-            $this->error(__('未提供产品类型'), []);
-        }
+        $lable = $this->request->param("label");
 
+        if(empty($lable)){
+            $map['lable']=$lable;
+        }
+        $map['status']=1;
+        $fanyongModel = new Fanyong();
+        $list         = $fanyongModel->where($map)->order('list_order','desc')->select();
+        $this->success(__('成功'), ['data'=>$list]);
     }
 
     // 返佣产品详情
@@ -200,6 +112,18 @@ class Index extends Api
         } else {
             $this->error(__('非法数据'), []);
         }
+    }
+
+    public function series(){
+        $xilei=new Xilie();
+        $data= $xilei->where('status','normal')->order('weigh','desc')->select();
+        $this->success(__('成功'), ['data'=>$data]);
+    }
+
+    public function label(){
+        $label=new FangyongLabel();
+        $data= $label->where('status','normal')->order('sort','desc')->select();
+        $this->success(__('成功'), ['data'=>$data]);
     }
 
 

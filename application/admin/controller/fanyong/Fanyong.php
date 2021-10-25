@@ -58,7 +58,9 @@ class Fanyong extends Backend
             return parent::add();
         }
         $Xilie = \app\common\model\Xilie::select();
+        $Labe = \app\common\model\FangyongLabel::select();
         $this->assign('xilie', $Xilie);
+        $this->assign('Lable', $Labe);
         return $this->view->fetch();
     }
 
@@ -71,7 +73,9 @@ class Fanyong extends Backend
             $this->error(__('No Results were found'));
         }
         $Xilie = \app\common\model\Xilie::select();
+        $Labe = \app\common\model\FangyongLabel::select();
         $this->assign('xilie', $Xilie);
+        $this->assign('Lable', $Labe);
         $row = $this->model->get($ids);
         if (!$row) {
             $this->error(__('No Results were found'));
