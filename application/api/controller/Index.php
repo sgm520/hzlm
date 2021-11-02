@@ -19,6 +19,7 @@ use app\common\model\Chaoshi;
 use app\common\model\ChaoshiCategory;
 use app\common\model\Chaoshigroup;
 use app\common\model\FangyongLabel;
+use app\common\model\FangyongPrice;
 use app\common\model\Fanyong;
 use app\common\model\Gonggao;
 use app\common\model\SlideItem;
@@ -95,7 +96,7 @@ class Index extends Api
         $limit = $this->request->param("limit");
         $user=$this->auth->getUserinfo();
         if(!empty($lable)){
-            $map['lable']=$lable;
+            $map['label_id']=$lable;
         }
         if(!empty($state)){
             $map['state']=$state;
