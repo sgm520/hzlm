@@ -24,23 +24,31 @@ class Fanyong extends Model
 
     ];
 
+    // 追加属性
+    protected $append = [
+        'back_money',
+    ];
+
     public function xilie(){
         return $this->belongsTo(Xilie::class,'state','id',[],'LEFT')->setEagerlyType(0);;
     }
 
-    public function getMoneyAttr($name)
+    public function getBackMoneyAttr($name)
     {
+
+
        if(Session::get('admin.id') !=1){
-            $other=FangyongPrice::where('product_id',$this->getAttr('id'))->where('user_id',Session::get('admin.id'))->find();
+            $other=FangyongPrice::where('product_id',$this->getData('id'))->where('user_id',Session::get('admin.id'))->find();
             if($other){
                 return  $other->price;
             }else{
-                return $this->value('money');
+                return $this->getData('money');
             }
        }else{
-           return $this->value('money');
+           return $this->getData('money');
        }
     }
+
 
 
 }

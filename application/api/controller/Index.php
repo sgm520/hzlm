@@ -31,7 +31,7 @@ class Index extends Api
 {
 
 
-    protected $noNeedLogin = '*';
+    protected $noNeedLogin = '';
     protected $noNeedRight = '*';
 
 
@@ -89,11 +89,12 @@ class Index extends Api
      */
     public function fanyong()
     {
-        $lable = $this->request->param("label");
-        $state = $this->request->param("state");
+        $lable = $this->request->param("label",0);
+        $state = $this->request->param("state",1);
         $page = $this->request->param("page",1);
         $limit = $this->request->param("limit");
-
+        $user=$this->auth->getUserinfo();
+        halt($user);
         if(!empty($lable)){
             $map['lable']=$lable;
         }
@@ -106,6 +107,12 @@ class Index extends Api
             'page'=>$page,
             'list_rows'=>$limit,
         ]);
+        $user['agent_id']=2;
+        foreach ($list as $k=>$v){
+            $other=FangyongPrice::where('product_id',$v->id)->where('user_id',$user['agent_id'])->find();
+            $v->price=$other['price'];
+        }
+
         $this->success(__('成功'), ['data'=>$list]);
     }
 

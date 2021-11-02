@@ -32,7 +32,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','editable'],
                         {field: 'id', title: 'ID'},
                         {field: 'name', title: __('产品名称'),operate: 'LIKE'},
                         {field: 'xilie.name', title: __('产品系列'),searchList: $.getJSON("ajax/fanyongstyle")},
-                        {field: 'money', title: __('结算佣金'), operate: false,editable:true},
+                        {field: 'back_money', title: __('结算佣金'), operate: false,editable:true},
                         {field: 'logo', title: __('logo'), events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
 
 
