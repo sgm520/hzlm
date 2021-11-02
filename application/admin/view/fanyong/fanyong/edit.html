@@ -24,7 +24,7 @@
     <div class="form-group">
         <label for="c-lable" class="control-label col-xs-12 col-sm-2">{:__('标签')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <select id="c-lable" data-rule="required" class="form-control selectpicker" name="row[lable]">
+            <select id="c-lable" data-rule="required" class="form-control selectpicker" name="row[label_id]">
                 {foreach name="Lable" item="vo"}
                 <option  value="{$vo.id}" {if $vo.id==$row.lable}selected{/if} >{$vo.name}</option>
                 {/foreach}
@@ -32,6 +32,7 @@
 
         </div>
     </div>
+
 
     <div class="form-group">
         <label for="c-status" class="control-label col-xs-12 col-sm-2">{:__('上架状态')}:</label>
@@ -50,7 +51,12 @@
             <input id="c-money" data-rule="required" class="form-control" name="row[money]" type="text" value="{$row.money|htmlentities}" placeholder="请输入结算佣金">
         </div>
     </div>
-
+    <div class="form-group">
+        <label for="c-conditions_day" class="control-label col-xs-12 col-sm-2">{:__('结算条件')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-conditions_day" data-rule="required" class="form-control" name="row[conditions_day]" type="text" value="{$row.conditions_day|htmlentities}" placeholder="请输入结算佣金">
+        </div>
+    </div>
     <div class="form-group">
         <label for="c-image" class="control-label col-xs-12 col-sm-2">{:__('logo')}:</label>
         <div class="col-xs-12 col-sm-8">
