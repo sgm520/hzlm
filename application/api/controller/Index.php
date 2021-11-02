@@ -94,11 +94,11 @@ class Index extends Api
         $page = $this->request->param("page",1);
         $limit = $this->request->param("limit");
 
-        if(empty($lable)){
+        if(!empty($lable)){
             $map['lable']=$lable;
         }
-        if($state){
-            $map['state']=$lable;
+        if(!empty($state)){
+            $map['state']=$state;
         }
         $map['status']=1;
         $fanyongModel = new Fanyong();

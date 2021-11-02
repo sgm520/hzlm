@@ -561,6 +561,7 @@ class User extends Api
 
 
     public function band(){
+
         $param = $this->request->param();
         if(empty($param['al_pay_name'])){
             $this->error(__('支付宝名称不能为空'),[]);
