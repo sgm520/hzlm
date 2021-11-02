@@ -26,7 +26,7 @@
         <div class="col-xs-12 col-sm-8">
             <select id="c-lable" data-rule="required" class="form-control selectpicker" name="row[label_id]">
                 {foreach name="Lable" item="vo"}
-                <option  value="{$vo.id}" {if $vo.id==$row.lable}selected{/if} >{$vo.name}</option>
+                <option  value="{$vo.id}" {if $vo.id==$row.label_id}selected{/if} >{$vo.name}</option>
                 {/foreach}
             </select>
 
