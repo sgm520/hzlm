@@ -94,7 +94,6 @@ class Index extends Api
         $page = $this->request->param("page",1);
         $limit = $this->request->param("limit");
         $user=$this->auth->getUserinfo();
-        halt($user);
         if(!empty($lable)){
             $map['lable']=$lable;
         }
@@ -107,7 +106,6 @@ class Index extends Api
             'page'=>$page,
             'list_rows'=>$limit,
         ]);
-        $user['agent_id']=2;
         foreach ($list as $k=>$v){
             $other=FangyongPrice::where('product_id',$v->id)->where('user_id',$user['agent_id'])->find();
             $v->price=$other['price'];
