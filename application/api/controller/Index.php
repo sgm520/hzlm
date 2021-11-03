@@ -113,7 +113,12 @@ class Index extends Api
         ]);
         foreach ($list as $k=>$v){
             $other=FangyongPrice::where('product_id',$v->id)->where('user_id',$user['agent_id'])->find();
-            $v->price=$other['price'];
+            if(empty($other)){
+                $v->price=$v['money'];
+            }else{
+                $v->price=$other['price'];
+            }
+
         }
 
         $this->success(__('成功'), ['data'=>$list]);
