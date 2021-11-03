@@ -100,12 +100,12 @@ class Fanyong extends Backend
                         $row->validateFailException(true)->validate($validate);
                     }
                     if (!$this->auth->isSuperAdmin()) {
-                        if (isset($params['money']) && !empty($params['money'])) {
+                        if (isset($params['back_money']) && !empty($params['back_money'])) {
                             $fangprice = new FangyongPrice();
                             $other=$fangprice->where('product_id',$ids)->where('user_id',$this->auth->id)->find();
                             if(empty($other)){
                                 $fangprice = new FangyongPrice();
-                                $result=  $fangprice->allowField(true)->save(['product_id' => $ids, 'createtime' => time(),'price'=>$params['money'],'user_id'=>$this->auth->id]);
+                                $result=  $fangprice->allowField(true)->save(['product_id' => $ids, 'createtime' => time(),'price'=>$params['back_money'],'user_id'=>$this->auth->id]);
                             }else{
                                 $result= $fangprice->allowField(true)->save([
                                     'price'  => $params['money'],
@@ -113,7 +113,7 @@ class Fanyong extends Backend
                             }
                         }
                     }else{
-
+                        $params['money']=$params['back_money'];
                         $result = $row->allowField(true)->save($params);
                     }
 
