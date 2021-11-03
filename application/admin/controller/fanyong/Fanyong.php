@@ -113,7 +113,10 @@ class Fanyong extends Backend
                             }
                         }
                     }else{
-                        $params['money']=$params['back_money'];
+                       if(isset($params['back_money']))
+                       {
+                           $params['money']=$params['back_money'];
+                       }
                         $result = $row->allowField(true)->save($params);
                     }
 
