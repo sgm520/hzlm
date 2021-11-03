@@ -119,19 +119,14 @@ class Fanyong extends Backend
                        }
                         $result = $row->allowField(true)->save($params);
                     }
-
-
                     Db::commit();
                 } catch (ValidateException $e) {
-                    halt(44);
                     Db::rollback();
                     $this->error($e->getMessage());
                 } catch (PDOException $e) {
-                    halt(44);
                     Db::rollback();
                     $this->error($e->getMessage());
                 } catch (Exception $e) {
-                    halt(44);
                     Db::rollback();
                     $this->error($e->getMessage());
                 }
