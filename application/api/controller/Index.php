@@ -94,12 +94,16 @@ class Index extends Api
         $state = $this->request->param("state",1);
         $page = $this->request->param("page",1);
         $limit = $this->request->param("limit");
+        $serach = $this->request->param("serach");
         $user=$this->auth->getUserinfo();
         if(!empty($lable)){
             $map['label_id']=$lable;
         }
         if(!empty($state)){
             $map['state']=$state;
+        }
+        if(!empty($serach)){
+
         }
         $map['status']=1;
         $fanyongModel = new Fanyong();
