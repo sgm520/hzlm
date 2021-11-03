@@ -135,7 +135,6 @@ class Index extends Api
             $where        = ["id" => $id, "status" => 1];
             $fanyongModel = new Fanyong();
             $row          = $fanyongModel->where($where)->find();
-
             $row['json']=json_decode($row['json'],true);
             $row['configjson']=json_decode($row['configjson'],true);
             $this->success(__('成功'), ['data'=>$row]);
