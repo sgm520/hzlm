@@ -103,7 +103,7 @@ class Index extends Api
             $map['state']=$state;
         }
         if(!empty($serach)){
-            $map['user_login'] = ['like', "%$serach%"];
+            $map['name'] = ['like', "%$serach%"];
         }
         $map['status']=1;
         $fanyongModel = new Fanyong();
