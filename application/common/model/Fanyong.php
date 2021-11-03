@@ -21,6 +21,8 @@ class Fanyong extends Model
 
     protected $type = [
         'more'      =>  'json',
+        'configjson'      =>  'json',
+        'json'      =>  'json',
 
     ];
 

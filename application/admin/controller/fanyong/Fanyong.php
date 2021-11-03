@@ -43,7 +43,11 @@ class Fanyong extends Backend
                 ->where($where)
                 ->order($sort, $order)
                 ->paginate($limit);
+            foreach ($list as $k => &$v) {
+                $v->json=json_decode($v->json,true);
+                $v->configjson=json_decode($v->configjson,true);
 
+            }
             $result = array("total" => $list->total(), "rows" => $list->items());
 
             return json($result);

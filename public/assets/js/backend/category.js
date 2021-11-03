@@ -28,15 +28,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'type', title: __('Type'), operate: false, searchList: Config.searchList, formatter: Table.api.formatter.label},
-                        {field: 'name', title: __('Name'), align: 'left', formatter:function (value, row, index) {
-                                return value.toString().replace(/(&|&amp;)nbsp;/g, '&nbsp;');
-                            }
-                        },
-                        {field: 'nickname', title: __('Nickname')},
-                        {field: 'flag', title: __('Flag'), formatter: Table.api.formatter.flag},
+
+                        {field: 'image', title: __('地址'), operate: false},
                         {field: 'image', title: __('Image'), operate: false, events: Table.api.events.image, formatter: Table.api.formatter.image},
-                        {field: 'weigh', title: __('Weigh')},
-                        {field: 'status', title: __('Status'), operate: false, formatter: Table.api.formatter.status},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]

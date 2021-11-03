@@ -59,6 +59,54 @@
     </div>
 
     <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('选项')}:</label>
+        <div class="col-xs-12 col-sm-8">
+
+            <dl class="fieldlist" data-name="row[configjson]">
+                <dd>
+                    <ins>{:__('Key')}</ins>
+                    <ins>{:__('Value')}</ins>
+                </dd>
+                <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i>
+                    {:__('Append')}</a></dd>
+                <textarea name="row[configjson]" class="form-control hide" cols="30" rows="5">{$row.configjson|htmlentities}</textarea>
+            </dl>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Json')}:</label>
+        <div class="col-xs-12 col-sm-8">
+
+            <dl class="fieldlist" data-template="basictpl" data-name="row[json]">
+                <dd>
+                    <ins>{:__('描述')}</ins>
+                    <ins>{:__('值')}</ins>
+                    <ins>{:__('字段')}</ins>
+                </dd>
+                <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i>
+                    {:__('Append')}</a></dd>
+                <textarea name="row[json]" class="form-control" cols="30" rows="5">{$row.json|htmlentities}</textarea>
+            </dl>
+            <script id="basictpl" type="text/html">
+                <dd class="form-inline">
+                    <ins>
+                        <input type="text" id="town<%=index%>" name="<%=name%>[<%=index%>][town]" class="form-control town" data-pagination="true" data-source="town/index" value="<%=row.town%>" placeholder="城镇" size="10"/>
+                    </ins>
+                    <ins>
+                        <input type="text" id="village<%=index%>" name="<%=name%>[<%=index%>][village]" class="form-control  village"  data-source="[]" value="<%=row.village%>" placeholder="村" size="10"/>
+                    </ins>
+                    <ins>
+                        <input type="text" id="groups<%=index%>" name="<%=name%>[<%=index%>][groups]" class="form-control  groups" data-source="[]" value="<%=row.groups%>" placeholder="组" size="10"/>
+                    </ins>
+                    <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span>
+                </dd>
+            </script>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
         <label for="c-link" class="control-label col-xs-12 col-sm-2">{:__('二维码链接')}:</label>
         <div class="col-xs-12 col-sm-8">
             <input id="c-link" data-rule="required" class="form-control" name="row[link]" type="text" value="{$row.link|htmlentities}" placeholder="请输入二维码链接">

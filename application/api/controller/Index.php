@@ -119,6 +119,9 @@ class Index extends Api
                 $v->price=$other['price'];
             }
 
+            $v->json=json_decode($v->json,true);
+            $v->configjson=json_decode($v->configjson,true);
+
         }
 
         $this->success(__('成功'), ['data'=>$list]);
