@@ -295,6 +295,8 @@ class Index extends Api
             $data['pid']=$this->auth->id;
             $data['p_id']=input('p_id');
             $data['configjson']=input('configjson');
+
+            halt($data);
             $data['json']=input('json');
             if(empty($data['p_id'])){
                 $this->error(__('产品id不能为空'), []);
