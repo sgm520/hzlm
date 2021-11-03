@@ -292,26 +292,20 @@ class Index extends Api
         if($this->request->post()){
             $UserModel = new User();
 
-            $data['pid']=input('pid');
-            $data['name']=input('name');
-            $data['tel']=input('tel');
+            $data['pid']=$this->auth->id;
             $data['p_id']=input('p_id');
-            $data['p_title']=input('p_title');
+            $data['configjson']=input('configjson');
+            $data['json']=input('json');
             if(empty($data['p_id'])){
                 $this->error(__('产品id不能为空'), []);
             }
-            $fanyong=db('fanyong')->where('id',$data['p_id'])->find();
-
             if(empty($fanyong['status'])){
                 $this->error(__('产品已下架,请联系客服'), []);
             }
-            $state=db('fanyong')->where('id',$data['p_id'])->value('state');
-
             $get_data = [
                 "status" => 2,
                 "ment" => $UserModel->GetOs(),
                 "time" => time(),
-                "state" => $state,
                 'user_ip'=>$this->get_ip()
             ];
             $in_data = array_merge($data,$get_data);
