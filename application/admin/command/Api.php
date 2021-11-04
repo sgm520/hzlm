@@ -20,7 +20,7 @@ class Api extends Command
             ->addOption('url', 'u', Option::VALUE_OPTIONAL, 'default api url', '')
             ->addOption('module', 'm', Option::VALUE_OPTIONAL, 'module name(admin/index/api)', 'api')
             ->addOption('output', 'o', Option::VALUE_OPTIONAL, 'output index file name', 'api.html')
-            ->addOption('template', 'e', Option::VALUE_OPTIONAL, '', 'authorization.html')
+            ->addOption('template', 'e', Option::VALUE_OPTIONAL, '', 'index.html')
             ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override general file', false)
             ->addOption('title', 't', Option::VALUE_OPTIONAL, 'document title', $site['name'] ?? '')
             ->addOption('class', 'c', Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'extend class', null)

@@ -3,6 +3,7 @@
 namespace app\api\controller;
 
 use app\admin\model\Admin;
+use app\admin\model\fankui\Fankui;
 use app\common\controller\Api;
 use app\common\library\Ems;
 use app\common\library\Sms;
@@ -581,6 +582,17 @@ class User extends Api
         $u_data->is_band=1;
         $u_data->save();
         $this->success(__('实名认证通过'),[]);
+    }
+
+    public function fankui(){
+        $context=input('text');
+        $url=input('url');
+        Fankui::create([
+            'context'=>$context,
+            'url'=>$url,
+            'user_id'=>$this->auth->id,
+        ]);
+        $this->success(__('感谢你的反馈'),[]);
     }
 
 
