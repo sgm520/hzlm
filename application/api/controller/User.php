@@ -539,11 +539,12 @@ class User extends Api
     }
     //实名认证
     public function real_name(){
-        $param = $this->request->param(["real_name","id_card"]);
-        if(empty($param['real_name'])){
+        $id_card=input('id_card');
+        $real_name=input('real_name');
+        if(empty($real_name)){
             $this->error(__('真实姓名不能为空'),[]);
         }
-        if(empty($param['id_card'])){
+        if(empty($id_card)){
             $this->error(__('身份证号码不能为空'),[]);
         }
 
@@ -552,8 +553,8 @@ class User extends Api
             $this->error(__('你已实名 无需重复实名认证'),[]);
         }
 
-        $u_data->real_name=$param['real_name'];
-        $u_data->id_card=$param['id_card'];
+        $u_data->real_name=$real_name;
+        $u_data->id_card=$id_card;
         $u_data->is_real=1;
         $u_data->save();
         $this->success(__('实名认证通过'),[]);
