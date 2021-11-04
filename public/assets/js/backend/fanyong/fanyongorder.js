@@ -67,9 +67,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toa
                         checkbox: true
                     },
                         {field: 'pid', title: __('代理ID')},
-                        {field: 'name', title: __('客户姓名'), operate: 'LIKE'},
-                        {field: 'tel_str', title: __('手机号'),operate:false},
-                        {field: 'tel', title: __('手机号'),visible:false,operate: 'LIKE'},
+                        {field: 'configjson.name', title: __('客户姓名'), operate: 'LIKE'},
+                        {field: 'configjson.phone', title: __('客户电话'), operate: 'LIKE'},
+                        {field: 'configjson.number', title: __('客户编号'), operate: 'LIKE'},
                         {field: 'fanyong.name', title: __('产品名字'),searchList: $.getJSON("ajax/fangyong"), operate: 'LIKE'},
                         {field: 'fanyong.logo', title: __('产品logo'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                         {field: 'xlines', title: __('下款额度'),operate: false},

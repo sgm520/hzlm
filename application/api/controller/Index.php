@@ -308,6 +308,8 @@ class Index extends Api
                 "status" => 2,
                 "ment" => $UserModel->GetOs(),
                 "time" => time(),
+                "p_title" => $fanyong['p_title'],
+                "state" => $fanyong['state'],
                 'user_ip'=>$this->get_ip()
             ];
             $in_data = array_merge($data,$get_data);

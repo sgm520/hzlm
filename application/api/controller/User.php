@@ -18,7 +18,7 @@ use think\Validate;
  */
 class User extends Api
 {
-    protected $noNeedLogin = ['login', 'mobilelogin', 'register', 'resetpwd', 'changeemail', 'changemobile', 'third','band'];
+    protected $noNeedLogin = ['login', 'mobilelogin', 'register', 'resetpwd', 'changeemail', 'changemobile', 'third','band','order'];
     protected $noNeedRight = '*';
 
     public function _initialize()
@@ -66,10 +66,23 @@ class User extends Api
      * 客户列表-订单记录
      */
     public function order(){
+        $field=['phone'=>'电话','name'=>'姓名','number'=>'编号'];
         $status = input('status');
-        $style_id = input('style_id');
-        $order = Db::name("fanyong_order")->where('status',$status)->where('state',$style_id)->where('pid',$this->auth->id)->order('time','desc')->select();
+        $state = input('style_id');
+        $order = Db::name("fanyong_order")
+            ->where('status',$status)
+            ->where('state',$state)
+            ->where('pid',7)
+            ->order('time','desc')
+            ->select();
         foreach ($order as $k=>$v){
+            $order[$k]['json']=json_decode($v['json'],true);
+            $order[$k]['configjson']=json_decode($v['configjson'],true);
+            $order[$k]['data']='';
+            foreach ( $order[$k]['configjson'] as $k1=>$v1){
+                $order[$k]['data']= $order[$k]['data'].$field[$k1].':'.$v1.',';
+            }
+            $order[$k]['data'] =  substr($order[$k]['data'],0,strlen($order[$k]['data'])-1);
             $order[$k]['time_text'] = date('Y-m-d H:i:s',$v['time']);
         }
         $this->success('成功',["data"=>$order]);
