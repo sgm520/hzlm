@@ -72,7 +72,7 @@ class User extends Api
         $order = Db::name("fanyong_order")
             ->where('status',$status)
             ->where('state',$state)
-            ->where('pid',7)
+            ->where('pid',$this->auth->id)
             ->order('time','desc')
             ->select();
         foreach ($order as $k=>$v){
@@ -84,6 +84,7 @@ class User extends Api
             }
             $order[$k]['data'] =  substr($order[$k]['data'],0,strlen($order[$k]['data'])-1);
             $order[$k]['time_text'] = date('Y-m-d H:i:s',$v['time']);
+            $order[$k]['url'] = Db::name('fanyong')->where('id',$v['p_id'])->value('logo');
         }
 
         $this->success('成功',["data"=>$order]);
