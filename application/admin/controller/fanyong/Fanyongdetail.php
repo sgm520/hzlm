@@ -31,6 +31,7 @@ class Fanyongdetail extends Backend {
                 ->with('fanyong')
                 ->where($where)
                 ->order($sort, $order)
+
                 ->paginate($limit);
             $result = array("total" => $list->total(), "rows" => $list->items());
 

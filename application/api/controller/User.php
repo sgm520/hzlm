@@ -66,13 +66,13 @@ class User extends Api
      * 客户列表-订单记录
      */
     public function order(){
-        $field=['phone'=>'电话','name'=>'姓名','number'=>'编号'];
+        $field=['phone'=>'电话','name'=>'姓名','number'=>'编号','time'=>'时间'];
         $status = input('status');
         $state = input('style_id');
         $order = Db::name("fanyong_order")
             ->where('status',$status)
             ->where('state',$state)
-            ->where('pid',$this->auth->id)
+            ->where('pid',7)
             ->order('time','desc')
             ->select();
         foreach ($order as $k=>$v){
@@ -85,6 +85,7 @@ class User extends Api
             $order[$k]['data'] =  substr($order[$k]['data'],0,strlen($order[$k]['data'])-1);
             $order[$k]['time_text'] = date('Y-m-d H:i:s',$v['time']);
         }
+
         $this->success('成功',["data"=>$order]);
 
     }
