@@ -82,7 +82,6 @@ class User extends Api
             foreach ( $order[$k]['configjson'] as $k1=>$v1){
                 if(isset($field[$k1])){
                     $order[$k]['data']= $order[$k]['data'].$field[$k1].':'.$v1.',';
-
                 }
             }
             $order[$k]['data'] =  substr($order[$k]['data'],0,strlen($order[$k]['data'])-1);
