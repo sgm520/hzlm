@@ -308,7 +308,7 @@ class Index extends Api
                 "status" => 2,
                 "ment" => $UserModel->GetOs(),
                 "time" => time(),
-                "p_title" => $fanyong['p_title'],
+                "p_title" => $fanyong['name'],
                 "state" => $fanyong['state'],
                 'user_ip'=>$this->get_ip()
             ];
