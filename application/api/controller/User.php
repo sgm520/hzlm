@@ -72,7 +72,7 @@ class User extends Api
         $order = Db::name("fanyong_order")
             ->where('status',$status)
             ->where('state',$state)
-            ->where('pid',7)
+            ->where('pid',$this->auth->id)
             ->order('time','desc')
             ->select();
         foreach ($order as $k=>$v){
