@@ -298,6 +298,9 @@ class Index extends Api
 
             $data['json']=  htmlspecialchars_decode(input('json'));
             $fanyong=db('fanyong')->where('id',$data['p_id'])->find();
+            if(empty($fanyong)){
+                $this->error(__('产品不存在'), []);
+            }
             if(empty($data['p_id'])){
                 $this->error(__('产品id不能为空'), []);
             }
