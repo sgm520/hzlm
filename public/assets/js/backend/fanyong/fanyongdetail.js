@@ -29,8 +29,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                         {field: 'tel', title: __('代理手机'),visible:false,operate: 'LIKE'},
                         {field: 'name', title: __('客户姓名'),operate: 'LIKE'},
 
-                        {field: 'k_tel_str', title: __('客户手机号'),operate:false},
-                        {field: 'k_tel', title: __('客户手机号'),visible:false,operate: 'LIKE'},
+                        // {field: 'k_tel_str', title: __('客户手机号'),operate:false},
+                        // {field: 'k_tel', title: __('客户手机号'),visible:false,operate: 'LIKE'},
 
                         {field: 'change', title: __('交易金额')},
                         {field: 'fanyong.logo', title: __('logo'), events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
