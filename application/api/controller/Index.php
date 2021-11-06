@@ -308,7 +308,7 @@ class Index extends Api
                 $this->error(__('产品已下架,请联系客服'), []);
             }
             $get_data = [
-                "status" => 2,
+                "status" => 1, //审核中
                 "ment" => $UserModel->GetOs(),
                 "time" => time(),
                 "p_title" => $fanyong['name'],

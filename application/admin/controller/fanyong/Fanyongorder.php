@@ -75,11 +75,12 @@ class Fanyongorder extends Backend
             $params = $this->request->post("row/a");
             if($params){
                 try {
-                    $row->setInc('xlines',$params['xlines']);
+
+
                     $row->setInc('fmoney',$params['fmoney']);
-                    $row->status=1;
+                    $row->status=3; //已通过
                     if($row->save()){
-                        $row->addfanyong($row->getAttr('name'));
+                        $row->addfanyong();
                     }
                     Db::commit();
                 } catch (\Exception $e) {

@@ -33,9 +33,9 @@ class Fanyongorder extends Model
 
     const status=[
            0=>'未通过',
-            3 => '未通过',
-            1 => '已结算',
-            2 => '审核中',
+            3 => '已结算',
+            1 => '审核中',
+            2 => '未通过',
         ];
 
     public function getStatusStrAttr($name)
@@ -44,11 +44,12 @@ class Fanyongorder extends Model
         return self::status[$this->status];
     }
 
-    public   function addfanyong($name)
+    public   function addfanyong()
     {
 
         $userModel = new User();
         $user = $userModel->get($this->pid);
+
         if(empty($user)){
             return  true;
         }
@@ -58,13 +59,12 @@ class Fanyongorder extends Model
          */
         if ($user->id) {
             $description = "直推客户奖励";
-            BalanceLogic::balance($user->id, $this->tel, $name, $this->fmoney, $this->p_id, $description, $remark);
+            BalanceLogic::balance($user->id, $this->tel, '', $this->fmoney, $this->p_id, $description, $remark);
         }
         if ($user) {
             $return_rate1 = 0.05;
             $return_rate2 = 0.02;
             $s_id = explode(",", $user->parent_path);
-            $rate = 0;
             foreach ($s_id as $k => $v) {
                 if ($k == 0) {
                     $rate = $return_rate1;
@@ -73,12 +73,12 @@ class Fanyongorder extends Model
                 }else{
                     continue;
                 }
-                $sid_user = $userModel->get($v);
+                $sid_user = $userModel->where('invite_code',$v)->find();
                 if($sid_user){
                     $des_fmoney =  bcmul($this->fmoney,$rate,3);
                     if($des_fmoney>0){
                         $description = $k+1 . "级直推奖励";
-                        BalanceLogic::balance($v, $this->tel, $name, $des_fmoney, $this->p_id, $description, $remark);
+                        BalanceLogic::balance($sid_user['id'], $this->tel, '', $des_fmoney, $this->p_id, $description, $remark);
                     }
                 }
 
