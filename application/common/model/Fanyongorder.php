@@ -5,6 +5,7 @@ namespace app\common\model;
 
 
 use app\admin\logic\BalanceLogic;
+use app\admin\model\Admin;
 use think\Model;
 
 class Fanyongorder extends Model
@@ -59,7 +60,7 @@ class Fanyongorder extends Model
          */
         if ($user->id) {
             $description = "直推客户奖励";
-            BalanceLogic::balance($user->id, $this->tel, '', $this->fmoney, $this->p_id, $description, $remark);
+            BalanceLogic::balance($user->id, $agent->username, '', $this->fmoney, $this->p_id, $description, $remark);
         }
         if ($user) {
             $return_rate1 = 0.05;
@@ -74,11 +75,12 @@ class Fanyongorder extends Model
                     continue;
                 }
                 $sid_user = $userModel->where('invite_code',$v)->find();
+                $agent=Admin::where('code')->find();
                 if($sid_user){
                     $des_fmoney =  bcmul($this->fmoney,$rate,3);
                     if($des_fmoney>0){
                         $description = $k+1 . "级直推奖励";
-                        BalanceLogic::balance($sid_user['id'], $this->tel, '', $des_fmoney, $this->p_id, $description, $remark);
+                        BalanceLogic::balance($sid_user['id'], $agent->username, '', $des_fmoney, $this->p_id, $description, $remark);
                     }
                 }
 
