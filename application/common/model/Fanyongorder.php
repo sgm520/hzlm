@@ -50,7 +50,7 @@ class Fanyongorder extends Model
 
         $userModel = new User();
         $user = $userModel->get($this->pid);
-
+        $agent=Admin::where('id',$user['agent_id'])->find();
         if(empty($user)){
             return  true;
         }
@@ -75,7 +75,7 @@ class Fanyongorder extends Model
                     continue;
                 }
                 $sid_user = $userModel->where('invite_code',$v)->find();
-                $agent=Admin::where('code',$sid_user->invite_code)->find();
+                $agent=Admin::where('id',$sid_user['agent_id'])->find();
                 if($sid_user){
                     $des_fmoney =  bcmul($this->fmoney,$rate,3);
                     if($des_fmoney>0){
