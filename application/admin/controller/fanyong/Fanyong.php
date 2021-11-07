@@ -114,7 +114,7 @@ class Fanyong extends Backend
                                 $result=  $fangprice->allowField(true)->save(['product_id' => $ids, 'createtime' => time(),'price'=>$params['back_money'],'user_id'=>$this->auth->id]);
                             }else{
                                 $result= $fangprice->allowField(true)->save([
-                                    'price'  => $params['money'],
+                                    'price'  => $params['back_money'],
                                 ],['product_id' => $ids, 'user_id'=>$this->auth->id]);
                             }
                         }

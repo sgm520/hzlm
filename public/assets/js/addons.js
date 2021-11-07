@@ -25,119 +25,123 @@ if ($("table.table").size() > 0) {
         };
     });
 }
+window.UMEDITOR_HOME_URL = Config.__CDN__ + "/assets/addons/umeditor/";
 require.config({
     paths: {
-        'summernote': '../addons/summernote/lang/summernote-zh-CN.min'
+        'umeditor': '../addons/umeditor/umeditor',
+        'umeditor.config': '../addons/umeditor/umeditor.config',
+        'umeditor.lang': '../addons/umeditor/lang/zh-cn/zh-cn',
     },
     shim: {
-        'summernote': ['../addons/summernote/js/summernote.min', 'css!../addons/summernote/css/summernote.css'],
+        'umeditor': {
+            deps: [
+                'umeditor.config',
+                'css!../addons/umeditor/themes/default/css/umeditor.min.css'
+            ],
+            exports: 'UM',
+        },
+        'umeditor.lang': ['umeditor']
     }
 });
+
 require(['form', 'upload'], function (Form, Upload) {
+    //监听上传文本框的事件
+    $(document).on("edui.file.change", ".edui-image-file", function (e, up, me, input, callback) {
+        for (var i = 0; i < this.files.length; i++) {
+            Upload.api.send(this.files[i], function (data) {
+                var url = data.url;
+                me.uploadComplete(JSON.stringify({url: url, state: "SUCCESS"}));
+            });
+        }
+        up.updateInput(input);
+        me.toggleMask("Loading....");
+        callback && callback();
+    });
     var _bindevent = Form.events.bindevent;
     Form.events.bindevent = function (form) {
         _bindevent.apply(this, [form]);
-        try {
-            //绑定summernote事件
-            if ($(".summernote,.editor", form).size() > 0) {
-                require(['summernote'], function () {
-                    var imageButton = function (context) {
-                        var ui = $.summernote.ui;
-                        var button = ui.button({
-                            contents: '<i class="fa fa-file-image-o"/>',
-                            tooltip: __('Choose'),
-                            click: function () {
-                                parent.Fast.api.open("general/attachment/select?element_id=&multiple=true&mimetype=image/*", __('Choose'), {
-                                    callback: function (data) {
-                                        var urlArr = data.url.split(/\,/);
-                                        $.each(urlArr, function () {
-                                            var url = Fast.api.cdnurl(this);
-                                            context.invoke('editor.insertImage', url);
-                                        });
-                                    }
-                                });
-                                return false;
-                            }
-                        });
-                        return button.render();
-                    };
-                    var attachmentButton = function (context) {
-                        var ui = $.summernote.ui;
-                        var button = ui.button({
-                            contents: '<i class="fa fa-file"/>',
-                            tooltip: __('Choose'),
-                            click: function () {
-                                parent.Fast.api.open("general/attachment/select?element_id=&multiple=true&mimetype=*", __('Choose'), {
-                                    callback: function (data) {
-                                        var urlArr = data.url.split(/\,/);
-                                        $.each(urlArr, function () {
-                                            var url = Fast.api.cdnurl(this);
-                                            var node = $("<a href='" + url + "'>" + url + "</a>");
-                                            context.invoke('insertNode', node[0]);
-                                        });
-                                    }
-                                });
-                                return false;
-                            }
-                        });
-                        return button.render();
-                    };
+        require(['umeditor', 'umeditor.lang'], function (UME, undefined) {
 
-                    $(".summernote,.editor", form).summernote({
-                        height: 250,
-                        lang: 'zh-CN',
-                        fontNames: [
-                            'Arial', 'Arial Black', 'Serif', 'Sans', 'Courier',
-                            'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande',
-                            "Open Sans", "Hiragino Sans GB", "Microsoft YaHei",
-                            '微软雅黑', '宋体', '黑体', '仿宋', '楷体', '幼圆',
-                        ],
-                        fontNamesIgnoreCheck: [
-                            "Open Sans", "Microsoft YaHei",
-                            '微软雅黑', '宋体', '黑体', '仿宋', '楷体', '幼圆'
-                        ],
-                        toolbar: [
-                            ['style', ['style', 'undo', 'redo']],
-                            ['font', ['bold', 'underline', 'strikethrough', 'clear']],
-                            ['fontname', ['color', 'fontname', 'fontsize']],
-                            ['para', ['ul', 'ol', 'paragraph', 'height']],
-                            ['table', ['table', 'hr']],
-                            ['insert', ['link', 'picture', 'video']],
-                            ['select', ['image', 'attachment']],
-                            ['view', ['fullscreen', 'codeview', 'help']],
-                        ],
-                        buttons: {
-                            image: imageButton,
-                            attachment: attachmentButton,
-                        },
-                        dialogsInBody: true,
-                        followingToolbar: false,
-                        callbacks: {
-                            onChange: function (contents) {
-                                $(this).val(contents);
-                                $(this).trigger('change');
-                            },
-                            onInit: function () {
-                            },
-                            onImageUpload: function (files) {
-                                var that = this;
-                                //依次上传图片
-                                for (var i = 0; i < files.length; i++) {
-                                    Upload.api.send(files[i], function (data) {
-                                        var url = Fast.api.cdnurl(data.url);
-                                        $(that).summernote("insertImage", url, 'filename');
-                                    });
+            //重写编辑器加载
+            UME.plugins['autoupload'] = function () {
+                var me = this;
+                me.setOpt('pasteImageEnabled', true);
+                me.setOpt('dropFileEnabled', true);
+                var sendAndInsertImage = function (file, editor) {
+                    try {
+                        Upload.api.send(file, function (data) {
+                            var url = Fast.api.cdnurl(data.url, true);
+                            editor.execCommand('insertimage', {
+                                src: url,
+                                _src: url
+                            });
+                        });
+                    } catch (er) {
+                    }
+                };
+
+                function getPasteImage(e) {
+                    return e.clipboardData && e.clipboardData.items && e.clipboardData.items.length == 1 && /^image\//.test(e.clipboardData.items[0].type) ? e.clipboardData.items : null;
+                }
+
+                function getDropImage(e) {
+                    return e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files : null;
+                }
+
+                me.addListener('ready', function () {
+                    if (window.FormData && window.FileReader) {
+                        var autoUploadHandler = function (e) {
+                            var hasImg = false,
+                                items;
+                            //获取粘贴板文件列表或者拖放文件列表
+                            items = e.type == 'paste' ? getPasteImage(e.originalEvent) : getDropImage(e.originalEvent);
+                            if (items) {
+                                var len = items.length,
+                                    file;
+                                while (len--) {
+                                    file = items[len];
+                                    if (file.getAsFile)
+                                        file = file.getAsFile();
+                                    if (file && file.size > 0 && /image\/\w+/i.test(file.type)) {
+                                        sendAndInsertImage(file, me);
+                                        hasImg = true;
+                                    }
                                 }
+                                if (hasImg)
+                                    return false;
                             }
-                        }
-                    });
+
+                        };
+                        me.getOpt('pasteImageEnabled') && me.$body.on('paste', autoUploadHandler);
+                        me.getOpt('dropFileEnabled') && me.$body.on('drop', autoUploadHandler);
+
+                        //取消拖放图片时出现的文字光标位置提示
+                        me.$body.on('dragover', function (e) {
+                            if (e.originalEvent.dataTransfer.types[0] == 'Files') {
+                                return false;
+                            }
+                        });
+                    }
                 });
-            }
-        } catch (e) {
 
-        }
-
-    };
+            };
+            $(".editor", form).each(function () {
+                var id = $(this).attr("id");
+                $(this).removeClass('form-control');
+                UME.list[id] = UME.getEditor(id, {
+                    serverUrl: Fast.api.fixurl('/addons/umeditor/api/'),
+                    initialFrameWidth: '100%',
+                    zIndex: 90,
+                    xssFilterRules: false,
+                    outputXssFilter: false,
+                    inputXssFilter: false,
+                    autoFloatEnabled: false,
+                    imageUrl: '',
+                    imagePath: Config.upload.cdnurl
+                });
+            });
+        });
+    }
 });
 
 });
