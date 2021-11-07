@@ -107,6 +107,9 @@ class Fanyong extends Backend
                     }
                     if (!$this->auth->isSuperAdmin()) {
                         if (isset($params['back_money']) && !empty($params['back_money'])) {
+                            if($row->money<$params['back_money']){
+                                $this->error('只允许小于等于原价格');
+                            }
                             $fangprice = new FangyongPrice();
                             $other=$fangprice->where('product_id',$ids)->where('user_id',$this->auth->id)->find();
                             if(empty($other)){
