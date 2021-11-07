@@ -126,6 +126,7 @@ class Fanyong extends Backend
                        {
                            $params['money']=$params['back_money'];
                        }
+                        $params['update_time']=time();
                         $result = $row->allowField(true)->save($params);
                     }
                     Db::commit();
