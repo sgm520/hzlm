@@ -18,7 +18,7 @@ class BalanceLogic
             "user_id" =>   $user_id,
             "create_time" =>   time(),
             "tel" =>   $user->mobile,
-            "k_tel" =>   $tel,
+            "k_tel" =>   $tel, //管理员
             "change" =>   $change,
             "p_id" =>   $p_id,
             "description" =>   $description,
