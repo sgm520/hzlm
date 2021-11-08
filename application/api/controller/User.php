@@ -173,12 +173,12 @@ class User extends Api
             $user=$this->auth->getUser();
             $user->invite_code=make_coupon_card();
             if($admin){
-                $user->agent_id=$admin['id']; //代理ID
-                $user->parent_id=$admin['id']; //上级id
+                $user->agent_id=$code; //代理ID
+                $user->parent_id=$code; //上级id
                 $user->parent_path=$admin['code'];
             }else{
                 $user->agent_id=$parent['agent_id']; //代理ID
-                $user->parent_id=$parent['id']; //上级id
+                $user->parent_id=$code; //上级id
                 $user->parent_path=$parent['invite_code'].','.$parent->parent_path;
             }
             $user->save();
