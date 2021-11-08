@@ -42,7 +42,7 @@ class User extends Backend
             }
 
 
-
+            $map['group_id']=0;
             $info=$this->auth->getUserInfo($this->auth->id);
             if(!$this->auth->isSuperAdmin()){
                 $map['agent_id']=$info['code'];
