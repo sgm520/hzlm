@@ -4,6 +4,7 @@ namespace app\admin\controller\user;
 
 use app\common\controller\Backend;
 use app\common\library\Auth;
+use think\Db;
 
 /**
  * 会员管理
@@ -39,6 +40,7 @@ class User extends Backend
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
+
 
 
             $info=$this->auth->getUserInfo($this->auth->id);

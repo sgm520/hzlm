@@ -66,7 +66,7 @@ class User extends Api
      * 客户列表-订单记录
      */
     public function order(){
-        $field=['phone'=>'电话','name'=>'姓名','number'=>'编号','time'=>'时间'];
+        $field=Db::name('keywords')->column('value','key');
         $status = input('status');
         $state = input('style_id');
         $order = Db::name("fanyong_order")
