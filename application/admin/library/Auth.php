@@ -164,6 +164,14 @@ class Auth extends \fast\Auth
         // 没找到匹配
         return false;
     }
+    public function checkid(){
+        if($this->id ==1){
+            return true;
+        }else{
+            return  false;
+        }
+
+    }
 
     /**
      * 检测是否登录

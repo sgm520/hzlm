@@ -47,8 +47,16 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'loginip', title: __('Loginip'), formatter: Table.api.formatter.search},
                         {field: 'jointime', title: __('Jointime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
                         {field: 'joinip', title: __('Joinip'), formatter: Table.api.formatter.search},
-                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.toggle,yes: 'normal',
-                            no: 'hidden', searchList: {normal: __('Normal'), hidden: __('Hidden')}},
+                        {field: 'status', title: __('Status'), yes: 'normal',
+                            no: 'hidden', searchList: {normal: __('Normal'), hidden: __('Hidden')},formatter: function (value, row, index) {
+
+                                var that = $.extend({}, this);
+                                if (Config.adminId ==1) {
+                                    return Table.api.formatter.toggle.call(that, value, row, index);
+                                }else{
+                                    return ''
+                                }
+                            }},
                         {field: 'operate', title: __('Operate'), table: table,
                             events: Table.api.events.operate,
                             buttons: [{
@@ -58,7 +66,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 classname: 'btn btn-info btn-xs btn-detail btn-dialog',
                                 url: 'my_child/index',
                                 visible:function (data) {
-                                    if(data.id !=1){
+                                    if(data.id !=1 && Config.adminId ==1){
                                         return  true
                                     }else{
                                         return  false
@@ -78,6 +86,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Controller.api.bindevent();
         },
         add: function () {
+
             Controller.api.bindevent();
         },
         edit: function () {

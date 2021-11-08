@@ -39,13 +39,22 @@ class User extends Backend
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
+
+
+            $info=$this->auth->getUserInfo($this->auth->id);
+            if(!$this->auth->isSuperAdmin()){
+                $map['agent_id']=$info['code'];
+            }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $list = $this->model
                 ->with('group')
                 ->where($where)
+                ->where($map)
                 ->order($sort, $order)
                 ->paginate($limit);
+
             foreach ($list as $k => $v) {
+
                 $v->avatar = $v->avatar ? cdnurl($v->avatar, true) : letter_avatar($v->nickname);
                 $v->hidden(['password', 'salt']);
             }
@@ -53,6 +62,9 @@ class User extends Backend
 
             return json($result);
         }
+
+        $this->assignconfig('adminId',$this->auth->id);
+        $this->assign('adminId',$this->auth->id);
         return $this->view->fetch();
     }
 
