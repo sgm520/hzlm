@@ -164,10 +164,10 @@ class User extends Api
         if ($mobile && !Validate::regex($mobile, "^1\d{10}$")) {
             $this->error(__('Mobile is incorrect'));
         }
-        $ret = Sms::check($mobile, $sms_code, 'register');
-        if (!$ret) {
-            $this->error(__('Captcha is incorrect'));
-        }
+//        $ret = Sms::check($mobile, $sms_code, 'register');
+//        if (!$ret) {
+//            $this->error(__('Captcha is incorrect'));
+//        }
         $ret = $this->auth->register($username,$password, $mobile,[]);
         if ($ret) {
             $user=$this->auth->getUser();
