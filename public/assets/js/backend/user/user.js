@@ -28,6 +28,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'id', title: __('Id'), sortable: true,operate: false},
                         {field: 'parent_id', title: __('上级'), sortable: true},
                         {field: 'parent_path', title: __('上上级'), sortable: true},
+                        {field: 'agent_id', title: __('管理员'), sortable: true},
                         {field: 'invite_code', title: __('邀请码')},
                         // {field: 'username', title: __('Username'), operate: 'LIKE'},
                         // {field: 'nickname', title: __('Nickname'), operate: 'LIKE'},
