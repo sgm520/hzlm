@@ -23,7 +23,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toa
                     return;
                 }
                 for (var i = 0; i < data.length; i++) {
-                    ids[i] = data[i]['id']
+                    ids[i] = data[i]['id'];
                 }
 
 
@@ -59,12 +59,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toa
                     }
                 );
             })
-            var colums=[  [
-                {checkbox: true},
-                {field: 'pid', title: __('代理ID')},
-                {field: 'configjson.name', title: __('客户姓名'), operate: 'LIKE'},
-                {field: 'configjson.phone', title: __('客户电话'), operate: 'LIKE'},
-                {field: 'configjson.number', title: __('客户编号'), operate: 'LIKE'},
+
+
+
+            var colums=  [
+
+                {field: 'configjson', title: __('数据'),operate: 'LIKE',visible: false},
                 {field: 'fanyong.name', title: __('产品名字'),searchList: $.getJSON("ajax/fangyong"), operate: 'LIKE'},
                 {field: 'fanyong.logo', title: __('产品logo'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                 {field: 'json.tu1', title: __('示例图1'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
@@ -120,14 +120,29 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toa
                         },],
                     formatter: Table.api.formatter.operate
                 }
-            ]]
+            ]
+
+            const columnsObject=Config.column;
+
+            for(let key  in columnsObject){
+
+                colums.unshift({
+                    field:'configjson.'+key,
+                    title:columnsObject[key],
+                    operate:false
+                })
+            }
+            colums.unshift(  {field: 'pid', title: __('代理ID')})
+            colums.unshift( {checkbox: true})
+
+            console.log(colums)
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'time',
-                columns:colums ,
-                commonSearch: false,
+                columns:[colums] ,
+                commonSearch: true,
 
             });
 
