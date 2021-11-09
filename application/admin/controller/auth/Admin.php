@@ -212,7 +212,6 @@ class Admin extends Backend
                     $adminValidate = \think\Loader::validate('Admin');
                     $adminValidate->rule([
                         'username' => 'require|regex:\w{3,12}|unique:admin,username,' . $row->id,
-                        'email'    => 'require|email|unique:admin,email,' . $row->id,
                         'password' => 'regex:\S{32}',
                     ]);
                     $result = $row->validate('Admin.edit')->save($params);

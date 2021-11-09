@@ -31,7 +31,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {field: 'state', checkbox: true, },
                         {field: 'id', title: 'ID'},
-                        {field: 'username', title: __('Username')},
+                        {field: 'username', title: __('Username'),operate: 'LIKE'},
                         {field: 'code', title: __('邀请码')},
                         {field: 'visit_url', title: __('邀请链接'), formatter: Table.api.formatter.url},
                         {field: 'groups_text', title: __('Group'), operate:false, formatter: Table.api.formatter.label},
