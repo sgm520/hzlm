@@ -110,7 +110,7 @@ class Admin extends Backend
             }
             $list = $this->model
                 ->where($where)
-
+                ->where($map)
                 ->field(['password', 'salt', 'token'], true)
                 ->order($sort, $order)
                 ->paginate($limit);
