@@ -33,14 +33,15 @@ class Fanyongorder extends Backend
             if(!$this->auth->isSuperAdmin()){
                 $admin=$this->auth->getUserInfo();
                 $user=Db::name('user')->where('agent_id',$admin['code'])->column('id','id');
-                $map['category_id'] = ['in',$user];
+                $map['pid'] = ['in',$user];
             }else{
-                $map['category_id'] = ['neq','not null'];
+                $map['pid'] = ['neq','not null'];
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $list = $this->model
                 ->with('fanyong')
                 ->where($where)
+                ->where($map)
                 ->order($sort, $order)
                 ->paginate($limit);
             foreach ($list as $k=>$v){
@@ -51,7 +52,8 @@ class Fanyongorder extends Backend
 
             return json($result);
         }
-
+        $this->assignconfig('adminId',$this->auth->id);
+        $this->assign('adminId',$this->auth->id);
         return $this->view->fetch();
 
     }

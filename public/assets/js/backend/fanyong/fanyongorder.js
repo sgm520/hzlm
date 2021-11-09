@@ -91,7 +91,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toa
                             classname: 'btn btn-info btn-xs btn-detail btn-dialog',
                             url: 'fanyong/fanyongorder/agree',
                             visible:function (data) {
-                                if(data.status ==1){
+                                if(data.status ==1 &&  Config.adminId ==1){
                                     return  true
                                 }else{
                                     return  false
@@ -111,7 +111,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toa
                                 return true;
                             },
                             visible:function (data) {
-                                if(data.status ==1){
+                                if(data.status ==1 &&  Config.adminId ==1){
                                     return  true
                                 }else{
                                     return  false
