@@ -103,9 +103,14 @@ class Admin extends Backend
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
 
+            if(!$this->auth->isSuperAdmin()){
+                $map['id']=$this->auth->id;
+            }else{
+                $map['id'] = ['neq','not null'];
+            }
             $list = $this->model
                 ->where($where)
-                ->where('id', 'in', $this->childrenAdminIds)
+
                 ->field(['password', 'salt', 'token'], true)
                 ->order($sort, $order)
                 ->paginate($limit);
