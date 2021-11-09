@@ -33,7 +33,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'id', title: 'ID'},
                         {field: 'username', title: __('Username')},
                         {field: 'code', title: __('邀请码')},
-                        {field: 'visit_url', title: __('邀请链接')},
+                        {field: 'visit_url', title: __('邀请链接'), formatter: Table.api.formatter.url},
                         {field: 'groups_text', title: __('Group'), operate:false, formatter: Table.api.formatter.label},
                         {field: 'email', title: __('Email')},
                         {field: 'status', title: __("Status"), searchList: {"normal":__('Normal'),"hidden":__('Hidden')}, formatter: Table.api.formatter.status},

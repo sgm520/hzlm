@@ -26,6 +26,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toa
                     ids[i] = data[i]['id']
                 }
 
+
+
                 Layer.confirm(
                     '确认选中的' + ids.length + '改为拒绝状态吗?', {
                         icon: 3,
@@ -57,77 +59,76 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toa
                     }
                 );
             })
+            var colums=[  [
+                {checkbox: true},
+                {field: 'pid', title: __('代理ID')},
+                {field: 'configjson.name', title: __('客户姓名'), operate: 'LIKE'},
+                {field: 'configjson.phone', title: __('客户电话'), operate: 'LIKE'},
+                {field: 'configjson.number', title: __('客户编号'), operate: 'LIKE'},
+                {field: 'fanyong.name', title: __('产品名字'),searchList: $.getJSON("ajax/fangyong"), operate: 'LIKE'},
+                {field: 'fanyong.logo', title: __('产品logo'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
+                {field: 'json.tu1', title: __('示例图1'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
+                {field: 'json.tu2', title: __('示例图2'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
+                {field: 'json.tu3', title: __('示例图3'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
+                {field: 'xlines', title: __('下款额度'),operate: false},
+                {field: 'fmoney', title: __('返佣金额'),operate: false},
+
+                {field: 'user_ip', title: __('ip'),operate: false},
+                {field: 'ment', title: __('设备'),operate: false},
+                {field: 'status_str', title: __('状态'),operate:false,
+                    formatter:Table.api.formatter.flag,
+                    custom: {'未通过': "danger", '已结算': "success", '审核中': "info"}
+                },
+                {field: 'status', title: __('状态'),visible:false, searchList: {1: __('已结算'), 0: __('未通过'),2:"审核中"}},
+                {field: 'time', title: __('申请时间'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                {field: 'operate', title: __('Operate'), table: table,
+                    events: Table.api.events.operate,
+                    buttons: [
+                        {
+                            name: 'agree',
+                            text: __('同意'),
+                            icon: 'fa fa-check',
+                            classname: 'btn btn-info btn-xs btn-detail btn-dialog',
+                            url: 'fanyong/fanyongorder/agree',
+                            visible:function (data) {
+                                if(data.status ==1){
+                                    return  true
+                                }else{
+                                    return  false
+                                }
+                            }
+                        },
+                        {
+                            name: 'refuse',
+                            text: __('拒绝'),
+                            title: __('拒绝'),
+                            classname: 'btn btn-xs btn-danger btn-magic btn-ajax',
+                            icon: 'fa fa-close',
+                            url: 'fanyong/fanyongorder/refuse',
+                            confirm: '你确定要拒绝?',
+                            success:function(){
+                                table.bootstrapTable('refresh', {});
+                                return true;
+                            },
+                            visible:function (data) {
+                                if(data.status ==1){
+                                    return  true
+                                }else{
+                                    return  false
+                                }
+                            }
+                        },],
+                    formatter: Table.api.formatter.operate
+                }
+            ]]
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'time',
-                columns: [
-                    [{
-                        checkbox: true
-                    },
-                        {field: 'pid', title: __('代理ID')},
-                        {field: 'configjson.name', title: __('客户姓名'), operate: 'LIKE'},
-                        {field: 'configjson.phone', title: __('客户电话'), operate: 'LIKE'},
-                        {field: 'configjson.number', title: __('客户编号'), operate: 'LIKE'},
-                        {field: 'fanyong.name', title: __('产品名字'),searchList: $.getJSON("ajax/fangyong"), operate: 'LIKE'},
-                        {field: 'fanyong.logo', title: __('产品logo'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
-                        {field: 'json.tu1', title: __('示例图1'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
-                        {field: 'json.tu2', title: __('示例图2'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
-                        {field: 'json.tu3', title: __('示例图3'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
-                        {field: 'xlines', title: __('下款额度'),operate: false},
-                        {field: 'fmoney', title: __('返佣金额'),operate: false},
+                columns:colums ,
+                commonSearch: false,
 
-                        {field: 'user_ip', title: __('ip'),operate: false},
-                        {field: 'ment', title: __('设备'),operate: false},
-                        {field: 'status_str', title: __('状态'),operate:false,
-                            formatter:Table.api.formatter.flag,
-                            custom: {'未通过': "danger", '已结算': "success", '审核中': "info"}
-                           },
-                        {field: 'status', title: __('状态'),visible:false, searchList: {1: __('已结算'), 0: __('未通过'),2:"审核中"}},
-                        {field: 'time', title: __('申请时间'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
-                        {field: 'operate', title: __('Operate'), table: table,
-                            events: Table.api.events.operate,
-                            buttons: [
-                                {
-                                    name: 'agree',
-                                    text: __('同意'),
-                                    icon: 'fa fa-check',
-                                    classname: 'btn btn-info btn-xs btn-detail btn-dialog',
-                                    url: 'fanyong/fanyongorder/agree',
-                                    visible:function (data) {
-                                        if(data.status ==1){
-                                            return  true
-                                        }else{
-                                            return  false
-                                        }
-                                    }
-                                },
-                                {
-                                    name: 'refuse',
-                                    text: __('拒绝'),
-                                    title: __('拒绝'),
-                                    classname: 'btn btn-xs btn-danger btn-magic btn-ajax',
-                                    icon: 'fa fa-close',
-                                    url: 'fanyong/fanyongorder/refuse',
-                                    confirm: '你确定要拒绝?',
-                                    success:function(){
-                                        table.bootstrapTable('refresh', {});
-                                        return true;
-                                    },
-                                    visible:function (data) {
-                                        if(data.status ==1){
-                                            return  true
-                                        }else{
-                                            return  false
-                                        }
-                                    }
-                                },],
-                            formatter: Table.api.formatter.operate
-                        }
-                    ]
-                ],
-                commonSearch: true
             });
 
             // 为表格绑定事件
