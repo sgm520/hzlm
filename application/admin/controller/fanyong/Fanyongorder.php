@@ -30,8 +30,14 @@ class Fanyongorder extends Backend
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
+            if(!$this->auth->isSuperAdmin()){
+                $admin=$this->auth->getUserInfo();
+                $user=Db::name('user')->where('agent_id',$admin['code'])->column('id','id');
+                $map['category_id'] = ['in',$user];
+            }else{
+                $map['category_id'] = ['neq','not null'];
+            }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-//            halt($where);
             $list = $this->model
                 ->with('fanyong')
                 ->where($where)
