@@ -113,7 +113,7 @@ class Admin extends Backend
             foreach ($list as $k => &$v) {
                 $groups = isset($adminGroupName[$v['id']]) ? $adminGroupName[$v['id']] : [];
                 $v['groups'] = implode(',', array_keys($groups));
-                $v['visit_url'] = config('site.font_url').$v['code'];
+                $v['visit_url'] = config('site.visit_url').$v['code'];
 
 
                 // 直接显示二维码
