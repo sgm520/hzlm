@@ -641,10 +641,12 @@ class User extends Api
 
     public function Indirect_friends(){
         $userModel = new \app\admin\model\User();
-        $data=$userModel->where('parent_id',$this->auth->id)->field('username,logintime,mobile,jointime,id,parent_id,prevtime,income')->select();//所有下下级
+
+        $user=$this->auth->getUser();
+        $data=$userModel->where('parent_id',$user->invite_code)->field('username,logintime,mobile,jointime,id,parent_id,prevtime,income')->select();//所有下下级
         $arr=[];
         foreach ($data as $k=>$v){
-            $data1= $userModel->where('parent_id',$v['id'])->field('username,logintime,mobile,jointime,id,parent_id,prevtime,income')->select();
+            $data1= $userModel->where('parent_id',$v['invite_code'])->field('username,logintime,mobile,jointime,id,parent_id,prevtime,income')->select();
             foreach($data1 as $k1=>$v1){
                 $data1[$k]['jointime_text'] = date('Y-m-d H:i:s',$v['jointime']);
                 array_push($arr,$data1[$k1]);
