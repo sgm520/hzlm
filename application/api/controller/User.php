@@ -626,7 +626,7 @@ class User extends Api
         $userModel = new \app\admin\model\User();
         // true 直推 false 间推
         if ($state ==1){
-            $user = $userModel->where('parent_id',$user->id)->field('username,logintime,mobile,jointime,id,parent_id,prevtime,income')->select();
+            $user = $userModel->where('parent_id',$user->invite_code)->field('username,logintime,mobile,jointime,id,parent_id,prevtime,income')->select();
             foreach($user as $k=>$v){
                 $user[$k]['jointime_text'] = date('Y-m-d H:i:s',$v['jointime']);
                 $user[$k]['username'] = $v['username'];
