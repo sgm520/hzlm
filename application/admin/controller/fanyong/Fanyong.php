@@ -75,6 +75,7 @@ class Fanyong extends Backend
 
         $row = $this->model->get($ids);
         $this->modelValidate = false;
+
         if (!$row) {
             $this->error(__('No Results were found'));
         }
