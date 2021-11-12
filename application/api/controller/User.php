@@ -643,7 +643,7 @@ class User extends Api
         $userModel = new \app\admin\model\User();
 
         $user=$this->auth->getUser();
-        $data=$userModel->where('parent_id',$user->invite_code)->field('username,logintime,mobile,jointime,id,parent_id,prevtime,income')->select();//所有下下级
+        $data=$userModel->where('parent_id',$user->invite_code)->field('username,logintime,mobile,jointime,id,parent_id,prevtime,income,invite_code')->select();//所有下下级
         $arr=[];
         foreach ($data as $k=>$v){
             $data1= $userModel->where('parent_id',$v['invite_code'])->field('username,logintime,mobile,jointime,id,parent_id,prevtime,income')->select();
