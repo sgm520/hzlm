@@ -112,6 +112,7 @@ class Fanyong extends Backend
                             }
                             $fangprice = new FangyongPrice();
                             $other=$fangprice->where('product_id',$ids)->where('user_id',$this->auth->id)->find();
+                            print_r($this->auth->id);
                             halt($other);
                             if(empty($other)){
                                 $fangprice = new FangyongPrice();
