@@ -60,11 +60,12 @@ class Fanyongorder extends Model
          */
         if ($user->id) {
             $description = "直推客户奖励";
-            BalanceLogic::balance($user->id, $agent['username'], '', $this->fmoney, $this->p_id, $description, $remark);
+            $des_fmoney =  bcmul($this->fmoney,0.8,3);
+            BalanceLogic::balance($user->id, $agent['username'], '', $des_fmoney, $this->p_id, $description, $remark);
         }
         if ($user) {
-            $return_rate1 = 0.05;
-            $return_rate2 = 0.02;
+            $return_rate1 = 0.15;
+            $return_rate2 = 0.05;
             $s_id = explode(",", $user->parent_path);
             foreach ($s_id as $k => $v) {
                 if ($k == 0) {

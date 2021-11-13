@@ -70,7 +70,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toa
                 {field: 'json.tu1', title: __('示例图1'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                 {field: 'json.tu2', title: __('示例图2'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                 {field: 'json.tu3', title: __('示例图3'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
-                {field: 'xlines', title: __('下款额度'),operate: false},
+                // {field: 'xlines', title: __('下款额度'),operate: false},
                 {field: 'fmoney', title: __('返佣金额'),operate: false},
 
                 {field: 'user_ip', title: __('ip'),operate: false},
