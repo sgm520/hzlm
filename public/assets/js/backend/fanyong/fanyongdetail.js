@@ -1,6 +1,8 @@
-define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function ($, undefined, Backend, Table, Form, Upload) {
+define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tablestickyheader','tablereorderrows','tabletreegrid','xeditable2'],
+    function ($, undefined, Backend, Table, Form,fixedcolumns,tablestickyheader,tablereorderrows,tabletreegrid,xeditable2) {
 
-    var Controller = {
+
+        var Controller = {
         index: function () {
 
             // 初始化表格参数配置
@@ -27,7 +29,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                         {field: 'user_id', title: __('代理ID')},
                         {field: 'tel', title: __('代理手机'),operate:false},
                         {field: 'k_tel', title: __('管理员手机'),operate: 'LIKE'},
-                        {field: 'change', title: __('交易金额')},
+                        {field: 'change', title: __('交易金额'),showsum:true},
                         {field: 'fanyong.logo', title: __('logo'), events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                         {field: 'remark', title: __('产品名称'),operate: 'LIKE'},
                         {field: 'description', title: __('返佣类型')},
