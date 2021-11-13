@@ -1,6 +1,38 @@
 define([], function () {
     require.config({
     paths: {
+    	'csmtable': '../addons/csmtable/js/csmtable',
+        'fixedcolumns': '../addons/csmtable/js/bootstrap-table-fixed-columns',
+        'tablereorderrows': '../addons/csmtable/js/bootstrap-table-reorder-rows',
+        'tablestickyheader': '../addons/csmtable/js/bootstrap-table-sticky-header',
+        'tabletreegrid': '../addons/csmtable/js/bootstrap-table-treegrid',
+        'jquerytablednd': '../addons/csmtable/js/jquery.tablednd.min',
+        'jquerytreegrid': '../addons/csmtable/js/jquery.treegrid.min',
+        'xeditable2': '../addons/csmtable/js/select2',
+    },
+    shim: {
+        'csmtable': {
+            deps: ["css!../addons/csmtable/css/csmtable.css", 'bootstrap-table']
+        },
+        'fixedcolumns': {
+            deps: ["css!../addons/csmtable/css/bootstrap-table-fixed-columns.css", 'bootstrap-table']
+        },
+        'tablereorderrows':{
+        	deps: ["css!../addons/csmtable/css/bootstrap-table-reorder-rows.css",'jquerytablednd', 'bootstrap-table']
+        },
+        'tablestickyheader':{
+        	deps: ["css!../addons/csmtable/css/bootstrap-table-sticky-header.css", 'bootstrap-table']
+        },
+        'tabletreegrid':{
+        	deps: ["css!../addons/csmtable/css/jquery.treegrid.min.css",'jquerytreegrid', 'bootstrap-table']
+        },
+        'xeditable2':{
+        	deps: ["css!../addons/csmtable/css/select2.css","css!../addons/csmtable/css/select2-bootstrap.css",'bootstrap-table','editable']
+        },
+    }
+});
+require.config({
+    paths: {
         'editable': '../libs/bootstrap-table/dist/extensions/editable/bootstrap-table-editable.min',
         'x-editable': '../addons/editable/js/bootstrap-editable.min',
     },

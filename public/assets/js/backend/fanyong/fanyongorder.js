@@ -1,4 +1,5 @@
-define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toastr'], function ($, undefined, Backend, Table, Form, Upload,Layer,Toastr) {
+define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tablestickyheader','tablereorderrows','tabletreegrid','xeditable2'],
+    function ($, undefined, Backend, Table, Form,fixedcolumns,tablestickyheader,tablereorderrows,tabletreegrid,xeditable2) {
 
     var Controller = {
         index: function () {
@@ -71,7 +72,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload','layer','toa
                 {field: 'json.tu2', title: __('示例图2'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                 {field: 'json.tu3', title: __('示例图3'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                 // {field: 'xlines', title: __('下款额度'),operate: false},
-                {field: 'fmoney', title: __('返佣金额'),operate: false},
+                {field: 'fmoney', title: __('返佣金额'),operate: false,showsum:true},
 
                 {field: 'user_ip', title: __('ip'),operate: false},
                 {field: 'ment', title: __('设备'),operate: false},
