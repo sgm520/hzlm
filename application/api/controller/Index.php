@@ -102,7 +102,7 @@ class Index extends Api
         if(!empty($state)){
             $map['state']=$state;
         }
-        if(!empty($serach)){
+        if(!empty($search)){
             $map['name'] = ['like', "%$search%"];
         }
         $map['status']=1;
