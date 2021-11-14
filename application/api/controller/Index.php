@@ -177,13 +177,13 @@ class Index extends Api
 
         $version=Version::order('id','desc')->find();
 
-        if(!empty($version['wgtUrl'])){
+     /*   if(!empty($version['wgtUrl'])){
             $version['wgtUrl']=get_http_type().$_SERVER['HTTP_HOST'].$version['wgtUrl'];
         }
 
         if(!empty($version['pkgUrl'])){
             $version['pkgUrl']=get_http_type().$_SERVER['HTTP_HOST'].$version['pkgUrl'];
-        }
+        }*/
         $this->success(__('成功'), ['data'=>$version]);
     }
 
