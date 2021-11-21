@@ -112,8 +112,8 @@ class Index extends Api
             'list_rows'=>$limit,
         ]);
         foreach ($list as $k=>$v){
-            halt($user['agent_id']);
-            $other=FangyongPrice::where('product_id',$v->id)->where('user_id',$user['agent_id'])->find();
+            $agent=Db::name('admin')->where('code',$user['agent_id'])->find();
+            $other=FangyongPrice::where('product_id',$v->id)->where('user_id',$agent['id'])->find();
             if(empty($other)){
                 $v->price=$v['money'];
             }else{
