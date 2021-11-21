@@ -5,6 +5,8 @@ namespace app\admin\controller\fanyong;
 use app\admin\logic\BalanceLogic;
 use app\admin\model\User;
 use app\common\controller\Backend;
+use app\common\model\FangyongPrice;
+use app\common\model\UserBalanceLog;
 use fast\Random;
 use think\Db;
 use think\Validate;
@@ -81,27 +83,39 @@ class Fanyongorder extends Backend
             if(empty($row)){
                 $this->error('订单不存在');
             }
-            $params = $this->request->post("row/a");
+
+            if(in_array($row->status,[2,3])){
+//                $this->error('该状态无法修改');
+            }
+            $agent=Db::name('admin')->where('id',$row->agent_id)->find();
+            $other=FangyongPrice::where('product_id',input('p_id'))->where('user_id',$row->agent_id)->find();
+            if(empty($other)){
+                $price=$row->price;
+            }else{
+                $price=$other['price'];
+            }
+            $params['fmoney']=$price;
             if($params){
                 try {
-
-
                     $row->setInc('fmoney',$params['fmoney']);
                     $row->status=3; //已通过
+                    $prifit=$row->price-$row->agent_price;
+                    if($prifit){
+                        Db::name('admin')->where('id',$row->agent_id)->setInc('ktx',$prifit);
+                    }
+                    $user_balance_log = [
+                        "user_id" =>   $row->agent_id, //合伙人id
+                        "create_time" =>   time(),
+                        "tel" =>   $agent['username'],
+                        "k_tel" =>   $agent['username'], //管理员
+                        "change" =>   $prifit,
+                        "p_id" =>   $row->p_id,
+                        "description" => '合伙人返佣',
+                        "remark" =>   $row->p_title,
+                    ];
+                    UserBalanceLog::create($user_balance_log);
                     if($row->save()){
-//                        $row->addfanyong();
-                        //代理商返佣
-                        $prifit=$row->price-$row->agent_price;
-
-                        if($prifit){
-                            Db::name('admin')->where('id',$row->agent_id)->setInc('ktx',$prifit);
-                        }
-                       $log_id= Db::name('agent_log')->insertGetId([
-                            'order'=>$row->id,
-                            'time'=>time(),
-                            'prifit'=>$prifit,
-                            'agent_id'=>$ids,
-                        ]);
+                        $row->addfanyong();
                     }
                     Db::commit();
                 } catch (\Exception $e) {
@@ -119,10 +133,10 @@ class Fanyongorder extends Backend
     public function refuse($ids){
         $ids = $ids ? $ids : $this->request->post("ids");
         $row = $this->model->get($ids);
-        if($row->status !=2){
+        if($row->status !=1){
             $this->error('该状态无法修改');
         }
-        $row->status=3;
+        $row->status=2;
         $row->save();
         $this->success();
     }
@@ -132,7 +146,7 @@ class Fanyongorder extends Backend
             $res = $this->model->where('id', $ids[$k])->value('status');
             if ($res) {
                 $data = [
-                    'status' => 0
+                    'status' => 2
                 ];
                 $this->model->where('id', $ids[$k])->update($data);
             }

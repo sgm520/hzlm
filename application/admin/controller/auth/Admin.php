@@ -4,6 +4,7 @@ namespace app\admin\controller\auth;
 
 use app\admin\model\AuthGroup;
 use app\admin\model\AuthGroupAccess;
+use app\admin\model\User;
 use app\common\controller\Backend;
 use fast\Random;
 use fast\Tree;
@@ -35,6 +36,7 @@ class Admin extends Backend
     protected $searchFields = 'id,username,nickname';
     protected $childrenGroupIds = [];
     protected $childrenAdminIds = [];
+    protected $noNeedRight=['withdrawal','bind','dashboard'];
 
     public function _initialize()
     {
@@ -313,4 +315,10 @@ class Admin extends Backend
         $this->dataLimitField = 'id';
         return parent::selectpage();
     }
+
+
+
+
+
+
 }

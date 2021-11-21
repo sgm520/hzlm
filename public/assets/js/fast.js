@@ -142,6 +142,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                     content: url,
                     zIndex: Layer.zIndex,
                     success: function (layero, index) {
+
                         var that = this;
                         //存储callback事件
                         $(layero).data("callback", that.callback);

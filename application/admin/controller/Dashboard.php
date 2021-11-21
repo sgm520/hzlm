@@ -18,6 +18,8 @@ use think\Db;
 class Dashboard extends Backend
 {
 
+    protected $noNeedRight=['index','bind','withdrawal'];
+
     /**
      * 查看
      */
@@ -43,32 +45,75 @@ class Dashboard extends Backend
         foreach ($joinlist as $k => $v) {
             $userlist[$v['join_date']] = $v['nums'];
         }
-
-        $dbTableList = Db::query("SHOW TABLE STATUS");
+        $map['group_id']=0;
+        $info=$this->auth->getUserInfo();
+        if(!$this->auth->isSuperAdmin()){
+            $map['agent_id']=$info['code'];
+        }
+        $info= Db::name('admin')->where('id',$this->auth->id)->find();
         $this->view->assign([
-            'totaluser'       => User::count(),
-            'totaladdon'      => count(get_addon_list()),
-            'totaladmin'      => Admin::count(),
-            'totalcategory'   => \app\common\model\Category::count(),
-            'todayusersignup' => User::whereTime('jointime', 'today')->count(),
-            'todayuserlogin'  => User::whereTime('logintime', 'today')->count(),
-            'sevendau'        => User::whereTime('jointime|logintime|prevtime', '-7 days')->count(),
-            'thirtydau'       => User::whereTime('jointime|logintime|prevtime', '-30 days')->count(),
-            'threednu'        => User::whereTime('jointime', '-3 days')->count(),
-            'sevendnu'        => User::whereTime('jointime', '-7 days')->count(),
-            'dbtablenums'     => count($dbTableList),
-            'dbsize'          => array_sum(array_map(function ($item) {
-                return $item['Data_length'] + $item['Index_length'];
-            }, $dbTableList)),
-            'attachmentnums'  => Attachment::count(),
-            'attachmentsize'  => Attachment::sum('filesize'),
-            'picturenums'     => Attachment::where('mimetype', 'like', 'image/%')->count(),
-            'picturesize'     => Attachment::where('mimetype', 'like', 'image/%')->sum('filesize'),
+            'totaluser'       => User::where($map)->count(),
+            'ktx'      =>$info['ktx'],
+            'ytx'      => $info['ytx'],
+            'al_pay_name'=>$info['al_pay_name'],
+            'al_pay_account'=>$info['al_pay_account']
         ]);
 
         $this->assignconfig('column', array_keys($userlist));
         $this->assignconfig('userdata', array_values($userlist));
 
+        return $this->view->fetch();
+    }
+
+    public  function bind(){
+        $params = $this->request->post("row/a");
+        $this->model = model('Admin');
+        $row = $this->model->get(['id' => $this->auth->id]);
+        $result = $row->save($params);
+        if($result){
+            $this->success('绑定成功','index');
+        }else{
+            $this->success('绑定失败','index');
+        }
+    }
+
+    public function withdrawal(){
+        $info= Db::name('admin')->where('id',$this->auth->id)->find();
+        if ($this->request->isPost()) {
+            $params = $this->request->post("row/a");
+            if (!is_numeric($params['money']) || $params['money'] <= 0) {
+                return $this->error(__('金额错误'));
+            }
+            if($info['ktx']<$params['money']){
+                $this->error(__("余额不足不能提现",'index'));
+            }
+
+            $id=Db::name('tixian')->insertGetId([
+                'money'=>$params['money'],
+                'tx_time'=>time(),
+                'state'=>2,
+                'user_login'=>$info['username'],
+                'user_id'=>$this->auth->id,
+                'al_pay_name'=>$info['al_pay_name'],
+                'al_pay_account'=>$info['al_pay_account'],
+                'type'=>2,
+                'remark'=>'管理员申请提现',
+
+            ]);
+            if($id){
+                Db::name('admin')->where('id',$this->auth->id)->setDec('ktx',$params['money']);
+//                Db::name('admin')->where('id',$this->auth->id)->setInc('ytx',$params['money']);
+                $this->success('提现成功');
+            }else{
+                $this->success('提现失败');
+            }
+        }
+
+        $this->view->assign([
+            'al_pay_name'=>$info['al_pay_name'],
+            'ktx'      =>$info['ktx'],
+            'al_pay_account'=>$info['al_pay_account']
+        ]);
         return $this->view->fetch();
     }
 

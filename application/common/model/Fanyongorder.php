@@ -6,7 +6,6 @@ namespace app\common\model;
 
 use app\admin\logic\BalanceLogic;
 use app\admin\model\Admin;
-use think\Db;
 use think\Model;
 
 class Fanyongorder extends Model
@@ -77,8 +76,8 @@ class Fanyongorder extends Model
                     continue;
                 }
                 $sid_user = $userModel->where('invite_code',$v)->find();
-                $agent=Admin::where('code',$sid_user['agent_id'])->find();
                 if($sid_user){
+                    $agent=Admin::where('code',$sid_user['agent_id'])->find();
                     $des_fmoney =  bcmul($this->fmoney,$rate,3);
                     if($des_fmoney>0){
                         $description = $k+1 . "级直推奖励";
@@ -88,7 +87,6 @@ class Fanyongorder extends Model
 
             }
         }
-
     }
 
 }

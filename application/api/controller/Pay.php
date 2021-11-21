@@ -4,7 +4,9 @@
 namespace app\api\controller;
 
 
+use app\common\model\FangyongPrice;
 use think\Controller;
+use think\Db;
 
 class Pay extends Controller
 {
@@ -47,5 +49,8 @@ class Pay extends Controller
         $msg = substr($msg,1).$md5Key;
         return  $msg;
     }
+
+
+
 
 }

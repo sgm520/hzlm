@@ -28,6 +28,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                         {field: 'al_pay_account', title: '支付宝账号',operate: 'LIKE'},
                         {field: 'al_pay_name', title: '支付宝名称',operate: 'LIKE'},
                         {field: 'money', title: '提现金额'},
+                        {field: 'remark', title: '备注'},
+
                         {
                             field: 'state',
                             title: '状态',

@@ -89,15 +89,13 @@ define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tab
                             name: 'agree',
                             text: __('同意'),
                             icon: 'fa fa-check',
-                            classname: 'btn btn-info btn-xs btn-detail btn-dialog',
+                            classname: 'btn btn-xs btn-danger btn-magic btn-ajax',
                             url: 'fanyong/fanyongorder/agree',
-                            visible:function (data) {
-                                if(data.status ==1 &&  Config.adminId ==1){
-                                    return  true
-                                }else{
-                                    return  false
-                                }
-                            }
+                            confirm: '你确定要同意吗?',
+                            success:function(){
+                                table.bootstrapTable('refresh', {});
+                                return true;
+                            },
                         },
                         {
                             name: 'refuse',
