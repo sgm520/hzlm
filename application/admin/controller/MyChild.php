@@ -40,6 +40,7 @@ class MyChild extends Backend
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
+
             $parnet= Db::name('user')->where('id',session('ids'))->find();
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $list = $this->model
