@@ -89,7 +89,19 @@ class Fanyongorder extends Backend
                     $row->setInc('fmoney',$params['fmoney']);
                     $row->status=3; //已通过
                     if($row->save()){
-                        $row->addfanyong();
+//                        $row->addfanyong();
+                        //代理商返佣
+                        $prifit=$row->price-$row->agent_price;
+                        halt($prifit);
+                        if($prifit){
+                            Db::name('admin')->where('id',$row->agent_id)->setInc('ktx',$prifit);
+                        }
+                        Db::name('agent_log')->insertGetId([
+                            'order'=>$row->id,
+                            'time'=>time(),
+                            'prifit'=>$prifit,
+                            'agent_id'=>$ids,
+                        ]);
                     }
                     Db::commit();
                 } catch (\Exception $e) {
