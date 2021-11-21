@@ -74,6 +74,7 @@ define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tab
                 // {field: 'xlines', title: __('下款额度'),operate: false},
                 {field: 'fmoney', title: __('返佣金额'),operate: false},
                 {field: 'agent_price', title: __('代理商价格'),operate: false},
+                {field: 'price', title: __('原价格'),operate: false},
                 {field: 'user_ip', title: __('ip'),operate: false},
                 {field: 'ment', title: __('设备'),operate: false},
                 {field: 'status_str', title: __('状态'),operate:false,
