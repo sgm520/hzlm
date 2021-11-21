@@ -54,17 +54,24 @@ class Tixian extends Backend
         if($row->state !=2 || $row->state==0){
             $this->error(__('该状态无法提现'));
         }
-        try {
-            $UserModel=\app\common\model\User::findOrFail($row->user_id);
-        }catch (ErrorException $e){
-            halt($e);
+        if($row->type ==1){
+            try {
+                $UserModel=\app\common\model\User::findOrFail($row->user_id);
+            }catch (ErrorException $e){
+                halt($e);
+            }
+            if(!$UserModel){
+                return $this->response()->error('找不到该用户')->refresh();
+            }
+            $row->state=0;
+            $row->save();
+            $UserModel->setInc('ktx',$row->money);
+        }else{
+            $row->state=0;
+            $row->save();
+            Db::name('admin')->where('id',$row->user_id)->setInc('ktx',$row->money);
         }
-        if(!$UserModel){
-            return $this->response()->error('找不到该用户')->refresh();
-        }
-        $row->state=0;
-        $row->save();
-        $UserModel->setInc('ktx',$row->money);
+
         $this->success(__('提现通过'));
     }
 
