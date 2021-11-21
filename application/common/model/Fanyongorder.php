@@ -6,6 +6,7 @@ namespace app\common\model;
 
 use app\admin\logic\BalanceLogic;
 use app\admin\model\Admin;
+use think\Db;
 use think\Model;
 
 class Fanyongorder extends Model
@@ -87,6 +88,17 @@ class Fanyongorder extends Model
 
             }
         }
+        //代理商返佣
+        $prifit=$this->price-$this->agent_price;
+        if($prifit){
+            Db::name('admin')->where('id',$this->agent_id)->setInc('ktx',$prifit);
+        }
+        Db::name('agent_log')->insertGetId([
+            'order'=>$this->id,
+            'time'=>time(),
+            'prifit'=>$prifit,
+            'agent_id'=>$this->agent_id,
+        ]);
     }
 
 }
