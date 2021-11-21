@@ -316,10 +316,21 @@ class Index extends Api
             if(empty($fanyong['status'])){
                 $this->error(__('产品已下架,请联系客服'), []);
             }
+            $user=$this->auth->getUser();
+            $agent= Db::name('admin')->where('code',$user['agent_id'])->find();
+            $other=FangyongPrice::where('product_id',input('p_id'))->where('user_id',$agent['id'])->find();
+            if(empty($other)){
+                $price=$fanyong['money'];
+            }else{
+                $price=$other['price'];
+            }
             $get_data = [
                 "status" => 1, //审核中
                 "ment" => $UserModel->GetOs(),
                 "time" => time(),
+                "agent_id" => $agent['id'],
+                "agent_price" => $price,
+                "price" => $fanyong['money'],
                 "p_title" => $fanyong['name'],
                 "state" => $fanyong['state'],
                 'user_ip'=>$this->get_ip()
