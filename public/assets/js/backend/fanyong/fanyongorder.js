@@ -124,7 +124,7 @@ define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tab
             ]
 
             const columnsObject=Config.column;
-
+            console.log(columnsObject)
             for(let key  in columnsObject){
 
                 colums.unshift({

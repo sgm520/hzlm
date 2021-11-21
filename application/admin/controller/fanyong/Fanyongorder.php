@@ -53,7 +53,7 @@ class Fanyongorder extends Backend
             return json($result);
         }
         $this->assignconfig('adminId',$this->auth->id);
-            $this->assignconfig('column',Db::name('keywords')->order('sort','desc')->column('value','key'));
+        $this->assignconfig('column',Db::name('keywords')->order('sort','desc')->column('value','key'));
         $this->assign('adminId',$this->auth->id);
         return $this->view->fetch();
 
