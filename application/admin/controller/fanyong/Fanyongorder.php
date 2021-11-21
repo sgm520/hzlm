@@ -88,13 +88,7 @@ class Fanyongorder extends Backend
 //                $this->error('该状态无法修改');
             }
             $agent=Db::name('admin')->where('id',$row->agent_id)->find();
-            $other=FangyongPrice::where('product_id',input('p_id'))->where('user_id',$row->agent_id)->find();
-            if(empty($other)){
-                $price=$row->price;
-            }else{
-                $price=$other['price'];
-            }
-            $params['fmoney']=$price;
+            $params['fmoney']=$row->agent_price;
             if($params){
                 try {
                     $row->setInc('fmoney',$params['fmoney']);
