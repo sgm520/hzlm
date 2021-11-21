@@ -92,11 +92,11 @@ class Fanyongorder extends Backend
 //                        $row->addfanyong();
                         //代理商返佣
                         $prifit=$row->price-$row->agent_price;
-                        halt($prifit);
+
                         if($prifit){
                             Db::name('admin')->where('id',$row->agent_id)->setInc('ktx',$prifit);
                         }
-                        Db::name('agent_log')->insertGetId([
+                       $log_id= Db::name('agent_log')->insertGetId([
                             'order'=>$row->id,
                             'time'=>time(),
                             'prifit'=>$prifit,
