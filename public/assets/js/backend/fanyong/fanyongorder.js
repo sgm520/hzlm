@@ -66,7 +66,7 @@ define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tab
             var colums=  [
 
                 {field: 'configjson', title: __('数据'),operate: 'LIKE',visible: false},
-                {field: 'fanyong.name', title: __('产品名字'),searchList: $.getJSON("ajax/fangyong"), operate: 'LIKE'},
+                {field: 'fanyong.name', title: __('产品名字'), operate: 'LIKE'},
                 {field: 'fanyong.logo', title: __('产品logo'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                 {field: 'json.tu1', title: __('示例图1'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                 {field: 'json.tu2', title: __('示例图2'),operate:false,events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
