@@ -47,34 +47,18 @@ class Category extends Backend
     public function index()
     {
         //设置过滤方法
-        $this->request->filter(['strip_tags']);
+        $this->request->filter(['strip_tags', 'trim']);
         if ($this->request->isAjax()) {
-            $search = $this->request->request("search");
-            $type = $this->request->request("type");
-
-            //构造父类select列表选项数据
-            $list = [];
-
-            foreach ($this->categorylist as $k => $v) {
-                if ($search) {
-                    if ($v['type'] == $type && stripos($v['name'], $search) !== false || stripos($v['nickname'], $search) !== false) {
-                        if ($type == "all" || $type == null) {
-                            $list = $this->categorylist;
-                        } else {
-                            $list[] = $v;
-                        }
-                    }
-                } else {
-                    if ($type == "all" || $type == null) {
-                        $list = $this->categorylist;
-                    } elseif ($v['type'] == $type) {
-                        $list[] = $v;
-                    }
-                }
+            //如果发送的来源是Selectpage，则转发到Selectpage
+            if ($this->request->request('keyField')) {
+                return $this->selectpage();
             }
-
-            $total = count($list);
-            $result = array("total" => $total, "rows" => $list);
+            list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $list = $this->model
+                ->where($where)
+                ->order($sort, $order)
+                ->paginate($limit);
+            $result = array("total" => $list->total(), "rows" => $list->items());
 
             return json($result);
         }
