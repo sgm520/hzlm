@@ -548,6 +548,7 @@ class User extends Api
             "money"=>$money, //提现金额
             "tx_time" => time(), //提现时间
             "state" => 2, //未处理
+            'remark'=>'用户申请提现',
             "user_id" => $this->auth->id,
             "user_login" =>$uList['mobile'],
             "al_pay_name" => $uList["al_pay_name"],
