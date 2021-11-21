@@ -21,8 +21,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 pk: 'id',
                 sortName: 'weigh',
                 pagination: true,
-                commonSearch: false,
-                search: false,
+                commonSearch: true,
+                search: true,
                 columns: [
                     [
                         {checkbox: true},
