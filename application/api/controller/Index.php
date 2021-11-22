@@ -67,7 +67,7 @@ class Index extends Api
             $articleModel = new Article();
             $where        = ["category" => $categoryId, "status" => 1];
             if($categoryId ==8){
-                $article      = $articleModel->where($where)->order('id desc')->find();
+                $article      = $articleModel->where($where)->order('id desc')->select();
 
             }else
             {
