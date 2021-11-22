@@ -81,7 +81,7 @@ define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tab
                     formatter:Table.api.formatter.flag,
                     custom: {'未通过': "danger", '已结算': "success", '审核中': "info"}
                 },
-                {field: 'status', title: __('状态'),visible:false, searchList: {1: __('已结算'), 0: __('未通过'),2:"审核中"}},
+                {field: 'status', title: __('状态'),visible:false, searchList: {1: __('审核中'), 3: __('已结算'),2:"为通过"}},
                 {field: 'time', title: __('申请时间'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
                 {field: 'operate', title: __('Operate'), table: table,width:150,
                     events: Table.api.events.operate,
