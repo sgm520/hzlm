@@ -66,7 +66,14 @@ class Index extends Api
         if (!empty($categoryId)) {
             $articleModel = new Article();
             $where        = ["category" => $categoryId, "status" => 1];
-            $article      = $articleModel->where($where)->order('id desc')->paginate();
+            if($categoryId ==8){
+                $article      = $articleModel->where($where)->order('id desc')->find();
+
+            }else
+            {
+                $article      = $articleModel->where($where)->order('id desc')->paginate();
+
+            }
             $this->success(__('获取成功'), ['data'=>$article]);
         } else {
             $this->error(__('未提供分类ID'), []);
