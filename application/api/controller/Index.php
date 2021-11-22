@@ -43,7 +43,7 @@ class Index extends Api
     public function article_category()
     {
         $category_article = new ArticleCategory();
-        $category         = $category_article->field("id,name")->order('weight','desc')->whereNotIn('id',[9])->where('status', 1)->select();
+        $category         = $category_article->field("id,name")->order('weight','desc')->where('status', 1)->select();
         $this->success(__('获取成功'), ['data'=>$category]);
     }
 
