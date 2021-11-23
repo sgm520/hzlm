@@ -32,9 +32,12 @@ class Fanyong extends Model
     ];
 
     public function xilie(){
-        return $this->belongsTo(Xilie::class,'state','id',[],'LEFT')->setEagerlyType(0);;
+        return $this->belongsTo(Xilie::class,'state','id',[],'LEFT')->setEagerlyType(0);
     }
 
+    public function bq(){
+        return $this->belongsTo(Label::class,'label_id','id',[],'LEFT')->setEagerlyType(0);
+    }
     public function getBackMoneyAttr($name)
     {
 

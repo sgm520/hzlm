@@ -41,7 +41,7 @@ class Fanyong extends Backend
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $list = $this->model
-                ->with('xilie')
+                ->with(['xilie','bq'])
                 ->where($where)
                 ->order($sort, $order)
                 ->paginate($limit);

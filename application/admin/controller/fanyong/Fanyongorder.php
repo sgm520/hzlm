@@ -50,7 +50,6 @@ class Fanyongorder extends Backend
             foreach ($list as $k=>$v){
                 $v->json=json_decode($v->json,true);
                 $v->configjson=json_decode($v->configjson,true);
-                $v->bq=$bq[$v->fanyong->label_id];
             }
             $result = array("total" => $list->total(), "rows" => $list->items());
 
