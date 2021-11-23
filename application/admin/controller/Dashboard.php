@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use addons\voicenotice\library\Voice;
 use app\admin\model\Admin;
 use app\admin\model\User;
 use app\common\controller\Backend;
@@ -102,6 +103,8 @@ class Dashboard extends Backend
             ]);
             if($id){
                 Db::name('admin')->where('id',$this->auth->id)->setDec('ktx',$params['money']);
+                $voice=  Voice::init() ;
+                $voice->admin([1])->addtabs("fanyong/fanyongtixian") ->send('你有新的提现申请请及时处理');
 //                Db::name('admin')->where('id',$this->auth->id)->setInc('ytx',$params['money']);
                 $this->success('提现成功');
             }else{

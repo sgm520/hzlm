@@ -2,6 +2,7 @@
 
 namespace app\api\controller;
 
+use addons\voicenotice\library\Voice;
 use app\admin\model\Admin;
 use app\admin\model\fankui\Fankui;
 use app\common\controller\Api;
@@ -519,6 +520,8 @@ class User extends Api
                 $u_user->ktx=$u_user->ktx-$param['money'];
                 $u_user->save();
                 $this->success('已提交,等待审核',[]);
+                $voice=  Voice::init() ;
+                $voice->admin([1])->addtabs("fanyong/fanyongtixian") ->send('你有新的提现申请请及时处理');
             }
             $this->error('提交失败',[]);
         }else{
