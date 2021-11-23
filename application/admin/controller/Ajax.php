@@ -327,4 +327,8 @@ class Ajax extends Backend
         return $categorylist;
     }
 
+    public function bq(){
+        $categorylist = Db::name('label')->field('id as id ,name')->select();
+        return $categorylist;
+    }
 }

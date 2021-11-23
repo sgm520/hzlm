@@ -31,7 +31,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {field: 'state', checkbox: true, },
                         {field: 'id', title: 'ID'},
-                        {field: 'username', title: __('Username'),operate: 'LIKE'},
+                        {field: 'username', title: __('手机号'),operate: 'LIKE'},
+                        {field: 'nickname', title: __('姓名'),operate: 'LIKE'},
                         {field: 'ktx', title: __('可提现')},
                         {field: 'ytx', title: __('已提现')},
                         {field: 'visit_url', title: __('邀请链接'), formatter: Table.api.formatter.url},

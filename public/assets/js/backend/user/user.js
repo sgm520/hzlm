@@ -25,7 +25,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 columns: [
                     [
                         {checkbox: true},
-                        {field: 'id', title: __('Id'), sortable: true,operate: false},
+                        {field: 'id', title: __('Id')},
                         {field: 'parent_id', title: __('上级'), sortable: true,operate: 'LIKE'},
                         {field: 'parent_path', title: __('上上级'), sortable: true,operate: 'LIKE'},
                         {field: 'agent_id', title: __('管理员'), sortable: true,operate: 'LIKE'},

@@ -46,9 +46,11 @@ class Fanyongorder extends Backend
                 ->where($map)
                 ->order($sort, $order)
                 ->paginate($limit);
+            $bq=Db::name('label')->column('name','id');
             foreach ($list as $k=>$v){
                 $v->json=json_decode($v->json,true);
                 $v->configjson=json_decode($v->configjson,true);
+                $v->bq=$bq[$v->fanyong->label_id];
             }
             $result = array("total" => $list->total(), "rows" => $list->items());
 
