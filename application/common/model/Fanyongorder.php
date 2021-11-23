@@ -45,6 +45,10 @@ class Fanyongorder extends Model
         return self::status[$this->status];
     }
 
+    public function code(){
+        return $this->belongsTo(Admin::class,'agent_id','id',[],'LEFT')->setEagerlyType(0);;
+    }
+
     public   function addfanyong()
     {
 

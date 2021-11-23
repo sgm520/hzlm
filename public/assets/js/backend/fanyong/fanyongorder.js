@@ -141,6 +141,7 @@ define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tab
                 })
             }
             colums.unshift(  {field: 'pid', title: __('代理ID')})
+            colums.unshift(  {field: 'code.code', title: __('邀请码'), operate: 'LIKE',})
             colums.unshift( {checkbox: true})
 
             console.log(colums)
@@ -151,7 +152,7 @@ define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tab
                 sortName: 'time',
                 columns:[colums] ,
                 fixedColumns: true,
-                fixedNumber: 15,
+                fixedNumber: 16,
                 stickyHeader: true,
                 clickToSelect: true,
                 treeGrid:false,

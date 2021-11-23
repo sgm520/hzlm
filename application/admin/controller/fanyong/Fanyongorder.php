@@ -41,7 +41,7 @@ class Fanyongorder extends Backend
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $list = $this->model
-                ->with('fanyong')
+                ->with(['fanyong','code'])
                 ->where($where)
                 ->where($map)
                 ->order($sort, $order)
