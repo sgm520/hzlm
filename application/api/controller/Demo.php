@@ -2,6 +2,7 @@
 
 namespace app\api\controller;
 
+use addons\voicenotice\library\Voice;
 use app\common\controller\Api;
 
 /**
@@ -40,7 +41,8 @@ class Demo extends Api
      */
     public function test()
     {
-        $this->success('返回成功', $this->request->param());
+        $voice=  Voice::init() ;
+        $voice->addtabs("/admin/dashboard") ->send('你有新的订单');
     }
 
     /**

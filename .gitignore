@@ -18,4 +18,5 @@ h5
 addons
 addons/*
 public/assets/addons
+public
 application/extra/*
