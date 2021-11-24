@@ -146,11 +146,13 @@ class Index extends Api
     {
         $id = $this->request->param("id");
         if (!empty($id)) {
-            $where        = ["id" => $id, "status" => 1];
             $fanyongModel = new Fanyong();
-            $row          = $fanyongModel->where($where)->find();
-            $row['json']=json_decode($row['json'],true);
-            $row['configjson']=json_decode($row['configjson'],true);
+            $row          = $fanyongModel->where('id',$id)->where('status',1)->find();
+            if($row){
+                $row['json']=json_decode($row['json'],true);
+                $row['configjson']=json_decode($row['configjson'],true);
+            }
+
             $this->success(__('成功'), ['data'=>$row]);
         } else {
             $this->error(__('非法数据'), []);
