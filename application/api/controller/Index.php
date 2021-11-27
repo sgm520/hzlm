@@ -32,7 +32,7 @@ class Index extends Api
 {
 
 
-    protected $noNeedLogin = 'getnotice,fanyong';
+    protected $noNeedLogin = 'getnotice';
     protected $noNeedRight = '*';
 
 
