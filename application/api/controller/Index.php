@@ -110,7 +110,7 @@ class Index extends Api
         $search = $this->request->param("search");
         $user=$this->auth->getUserinfo();
         if(!empty($lable)){
-            $map['label_id']=$lable;
+            $map['']=['exp',Db::raw("FIND_IN_SET({$lable},`label_id`)")];
         }
         if(!empty($state)){
             $map['state']=$state;
