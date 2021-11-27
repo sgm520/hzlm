@@ -26,6 +26,10 @@ class Fanyong extends Model
 
     ];
 
+    public function getLabelIdAttr(){
+        return explode(',',$this->getData('label_id'));
+    }
+
     // 追加属性
     protected $append = [
         'back_money',
