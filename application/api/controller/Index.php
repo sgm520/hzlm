@@ -32,7 +32,7 @@ class Index extends Api
 {
 
 
-    protected $noNeedLogin = 'getnotice';
+    protected $noNeedLogin = 'getnotice,fanyong';
     protected $noNeedRight = '*';
 
 
@@ -124,6 +124,7 @@ class Index extends Api
             'page'=>$page,
             'list_rows'=>$limit,
         ]);
+
         foreach ($list as $k=>$v){
             $agnet= Db::name('admin')->where('code',$user['agent_id'])->find();
             $other=FangyongPrice::where('product_id',$v->id)->where('user_id',$agnet['id'])->find();
