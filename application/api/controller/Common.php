@@ -8,6 +8,7 @@ use app\common\library\Upload;
 use app\common\model\Area;
 use app\common\model\Version;
 use fast\Random;
+use OSS\OssClient;
 use think\Config;
 use think\Hook;
 
@@ -68,63 +69,45 @@ class Common extends Api
      */
     public function upload()
     {
-        Config::set('default_return_type', 'json');
-        //必须设定cdnurl为空,否则cdnurl函数计算错误
-        Config::set('upload.cdnurl', '');
-        $chunkid = $this->request->post("chunkid");
-        if ($chunkid) {
-            if (!Config::get('upload.chunking')) {
-                $this->error(__('Chunk file disabled'));
-            }
-            $action = $this->request->post("action");
-            $chunkindex = $this->request->post("chunkindex/d");
-            $chunkcount = $this->request->post("chunkcount/d");
-            $filename = $this->request->post("filename");
-            $method = $this->request->method(true);
-            if ($action == 'merge') {
-                $attachment = null;
-                //合并分片文件
-                try {
-                    $upload = new Upload();
-                    $attachment = $upload->merge($chunkid, $chunkcount, $filename);
-                } catch (UploadException $e) {
-                    $this->error($e->getMessage());
+        //默认普通上传文件
+        $config = get_addon_config('alioss');
+        $oss = new OssClient($config['accessKeyId'], $config['accessKeySecret'], $config['endpoint']);
+        $file = $this->request->file('file');
+        //检测删除文件或附件
+        $checkDeleteFile = function ($attachment, $upload, $force = false) use ($config) {
+            //如果设定为不备份则删除文件和记录 或 强制删除
+            if ((isset($config['serverbackup']) && !$config['serverbackup']) || $force) {
+                if ($attachment && !empty($attachment['id'])) {
+                    $attachment->delete();
                 }
-                $this->success(__('Uploaded successful'), ['url' => $attachment->url, 'fullurl' => cdnurl($attachment->url, true)]);
-            } elseif ($method == 'clean') {
-                //删除冗余的分片文件
-                try {
-                    $upload = new Upload();
-                    $upload->clean($chunkid);
-                } catch (UploadException $e) {
-                    $this->error($e->getMessage());
+                if ($upload) {
+                    //文件绝对路径
+                    $filePath = $upload->getFile()->getRealPath() ?: $upload->getFile()->getPathname();
+                    @unlink($filePath);
                 }
-                $this->success();
-            } else {
-                //上传分片文件
-                //默认普通上传文件
-                $file = $this->request->file('file');
-                try {
-                    $upload = new Upload($file);
-                    $upload->chunk($chunkid, $chunkindex, $chunkcount);
-                } catch (UploadException $e) {
-                    $this->error($e->getMessage());
-                }
-                $this->success();
             }
-        } else {
-            $attachment = null;
-            //默认普通上传文件
-            $file = $this->request->file('file');
-            try {
-                $upload = new Upload($file);
-                $attachment = $upload->upload();
-            } catch (UploadException $e) {
-                $this->error($e->getMessage());
-            }
-
-            $this->success(__('Uploaded successful'), ['url' => $attachment->url, 'fullurl' => cdnurl($attachment->url, true)]);
+        };
+        try {
+            $upload = new Upload($file);
+            $attachment = $upload->upload();
+        } catch (UploadException $e) {
+            $this->error($e->getMessage());
         }
+        //文件绝对路径
+        $filePath = $upload->getFile()->getRealPath() ?: $upload->getFile()->getPathname();
+
+        $url = $attachment->url;
+        try {
+            $ret = $oss->uploadFile($config['bucket'], ltrim($attachment->url, "/"), $filePath);
+
+            //成功不做任何操作
+        } catch (\Exception $e) {
+            $checkDeleteFile($attachment, $upload, true);
+            $this->error("上传失败");
+        }
+        $checkDeleteFile($attachment, $upload);
+        $this->success("上传成功",  ['url' => $url, 'fullurl' => cdnurl($url, true)]);
+
 
     }
 }
