@@ -95,8 +95,9 @@ class Fanyong extends Backend
         }
         if ($this->request->isPost()) {
             $params = $this->request->post("row/a");
-
-            $params['label_id'] = implode(',',$params['label_id']);
+             if(!empty($params['label_id'])){
+                 $params['label_id'] = implode(',',$params['label_id']);
+             }
             if ($params) {
                 $params = $this->preExcludeFields($params);
                 $result = false;
