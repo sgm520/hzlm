@@ -55,7 +55,8 @@ class Index extends Api
 
     public function getsystemnotice(){
         $category_article = new ArticleCategory();
-        $category         = $category_article->field("id,name,image")->where('id',9)->order('weight','desc')->where('status', 1)->find();
+        $categoryId = $this->request->param("category",8);
+        $category         = $category_article->field("id,name,image")->where('id',$categoryId)->order('weight','desc')->where('status', 1)->find();
         $this->success(__('获取成功'), ['data'=>$category]);
     }
 
