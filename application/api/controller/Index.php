@@ -65,6 +65,7 @@ class Index extends Api
      */
     public function article()
     {
+        $user=$this->auth->getUserinfo();
         $categoryId = $this->request->param("category");
         if (!empty($categoryId)) {
             $articleModel = new Article();
@@ -74,6 +75,11 @@ class Index extends Api
 
             }else if($categoryId ==9){
                 $article      = $articleModel->where($where)->order('id desc')->find();
+                if(Db::where('read')->where('user_id',$user)->where('article_id',$article['id'])->count()){
+                    $this->success(__('获取成功'), ['data'=>[]]);
+                }else{
+                    $this->success(__('获取成功'), ['data'=>$article]);
+                }
             }
             else
             {
@@ -83,6 +89,18 @@ class Index extends Api
             $this->success(__('获取成功'), ['data'=>$article]);
         } else {
             $this->error(__('未提供分类ID'), []);
+        }
+    }
+
+    public function read(){
+        $user=$this->auth->getUserinfo();
+        $article_id = $this->request->param("article_id");
+        $id=Db::name('read')->insertGetId([
+            'article_id'=>$article_id,
+            'user_id'=>$user['id'],
+        ]);
+        if($id){
+            $this->success(__('阅读成'));
         }
     }
 
