@@ -77,7 +77,7 @@ class Index extends Api
                 $article      = $articleModel->where($where)->order('id desc')->find();
                 $count=Db::name('read')->where('user_id',$user['id'])->where('article_id',$article->id)->count();
                 if($count){
-                    $this->success(__('获取成功'), ['data'=>[]]);
+                    $this->success(__('获取成功'), ['data'=>null]);
                 }else{
                     $this->success(__('获取成功'), ['data'=>$article]);
                 }
