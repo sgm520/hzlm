@@ -86,6 +86,15 @@ class Index extends Api
         }
     }
 
+    public function getlist(){
+        $categoryId = $this->request->param("category");
+        $articleModel = new Article();
+        $where        = ["category" => $categoryId, "status" => 1];
+        $article      = $articleModel->where($where)->order('id desc')->paginate();
+        $this->success(__('获取成功'), ['data'=>$article]);
+
+    }
+
     public function add_view(){
         $article_id = $this->request->param("article_id");
         if(empty($article_id)){
