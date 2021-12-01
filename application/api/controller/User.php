@@ -409,6 +409,22 @@ class User extends Api
         $newpassword = $this->request->post("newpassword");
 
         $confirm_password = $this->request->param('confirm_password');
+        if (!Validate::regex($mobile, "^1\d{10}$")) {
+            $this->error(__('Mobile is incorrect'));
+        }
+        $captcha = $this->request->post("captcha");
+        if (!$newpassword || !$captcha) {
+            $this->error(__('Invalid parameters'));
+        }
+        $user = \app\common\model\User::getByMobile($mobile);
+        if (!$user) {
+            $this->error(__('User not found'));
+        }
+        $ret = Sms::check($mobile, $captcha, 'resetpwd');
+        if (!$ret) {
+            $this->error(__('Captcha is incorrect'));
+        }
+        Sms::flush($mobile, 'resetpwd');
         if(empty($confirm_password)){
             $this->error(__('确认密码不能为空'));
         }
