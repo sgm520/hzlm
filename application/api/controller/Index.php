@@ -47,13 +47,9 @@ class Index extends Api
         $this->success(__('获取成功'), ['data'=>$category]);
     }
 
-    public function getnotice(){
-        $category_article = new ArticleCategory();
-        $category         = $category_article->field("id,name,image")->where('id',8)->order('weight','desc')->where('status', 1)->find();
-        $this->success(__('获取成功'), ['data'=>$category]);
-    }
 
-    public function getsystemnotice(){
+
+    public function getnotice(){
         $category_article = new ArticleCategory();
         $categoryId = $this->request->param("category",8);
         $category         = $category_article->field("id,name,image")->where('id',$categoryId)->order('weight','desc')->where('status', 1)->find();
