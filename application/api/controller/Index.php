@@ -75,7 +75,7 @@ class Index extends Api
 
             }else if($categoryId ==9){
                 $article      = $articleModel->where($where)->order('id desc')->find();
-                if(Db::where('read')->where('user_id',$user)->where('article_id',$article['id'])->count()){
+                if(Db::where('read')->where('user_id',$user['id'])->where('article_id',$article['id'])->count()){
                     $this->success(__('获取成功'), ['data'=>[]]);
                 }else{
                     $this->success(__('获取成功'), ['data'=>$article]);
