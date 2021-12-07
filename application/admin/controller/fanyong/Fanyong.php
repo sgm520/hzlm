@@ -117,7 +117,7 @@ class Fanyong extends Backend
                             $fangprice = new FangyongPrice();
                             $other=$fangprice->where('product_id',$ids)->where('user_id',$this->auth->id)->find();
                             if(empty($other)){
-                                Db::name('fangyong_price')->insertGetId(['product_id' => $ids, 'createtime' => time(),'price'=>$params['back_money'],'user_id'=>$this->auth->id]);
+                                $result=  Db::name('fangyong_price')->insertGetId(['product_id' => $ids, 'createtime' => time(),'price'=>$params['back_money'],'user_id'=>$this->auth->id]);
                             }else{
                                 $result= $fangprice->allowField(true)->save([
                                     'price'  => $params['back_money'],
