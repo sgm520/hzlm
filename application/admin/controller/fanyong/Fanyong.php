@@ -128,9 +128,7 @@ class Fanyong extends Backend
                        if(isset($params['back_money']))
                        {
                            $params['money']=$params['back_money'];
-                           if($result){
-                               Db::name('fangyong_price')->where('product_id',$ids)->update(['price'=>$params['back_money']]);
-                           }
+                           Db::name('fangyong_price')->where('product_id',$ids)->update(['price'=>$params['back_money']]);
                        }
                         $params['update_time']=time();
                         $result = $row->allowField(true)->save($params);
