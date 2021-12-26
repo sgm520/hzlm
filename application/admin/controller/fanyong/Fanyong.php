@@ -3,6 +3,7 @@
 namespace app\admin\controller\fanyong;
 
 
+use app\admin\model\Merchant;
 use app\common\controller\Backend;
 use app\common\model\FangyongPrice;
 use app\common\model\FanyongStyle;
@@ -67,6 +68,8 @@ class Fanyong extends Backend
         $Labe = \app\common\model\FangyongLabel::select();
         $this->assign('xilie', $Xilie);
         $this->assign('Lable', $Labe);
+        $mechant=Merchant::select();
+        $this->assign('mechant', $mechant);
         return $this->view->fetch();
     }
 
@@ -81,8 +84,11 @@ class Fanyong extends Backend
         }
         $Xilie = \app\common\model\Xilie::select();
         $Labe = \app\common\model\FangyongLabel::select();
+
+        $mechant=Merchant::select();
         $this->assign('xilie', $Xilie);
         $this->assign('Lable', $Labe);
+        $this->assign('mechant', $mechant);
         $row = $this->model->get($ids);
         if (!$row) {
             $this->error(__('No Results were found'));
