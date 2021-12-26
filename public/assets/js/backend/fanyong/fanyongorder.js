@@ -164,6 +164,7 @@ define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tab
             // 给表单绑定事件
             Form.api.bindevent($("#update-form"), function () {
 
+
             });
         },
         add: function () {
