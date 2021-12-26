@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <title>订单中心</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        body{
+            background: white;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-row :gutter="10">
+        <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple"><h2>产品中心</h2></div></el-col>
+    </el-row>
+    <el-row :gutter="10">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form-item label="产品">
+                <el-input v-model="formInline.p_title" placeholder="产品"></el-input>
+            </el-form-item>
+            <el-form-item label="状态">
+                <el-select v-model="formInline.dl_status" placeholder="请选择活动区域">
+                    <el-option label="待审核" value="1"></el-option>
+                    <el-option label="通过" value="2"></el-option>
+                    <el-option label="拒绝" value="3"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">查询</el-button>
+            </el-form-item>
+        </el-form>
+    </el-row>
+
+    <el-row :gutter="10">
+        <el-table
+                :data="tableData"
+                border
+                v-loading="loading"
+                style="width: 100%">
+            <el-table-column
+                    fixed
+                    prop="p_title"
+                    label="产品名称"
+                    width="150">
+            </el-table-column>
+            <el-table-column
+                    prop="logo"
+                    label="logo"
+                    width="150">
+                <template v-slot="scope">
+                    <img :src="'https://iimg.tvpdd.com/'+scope.row.fanyong.logo" alt="暂无图片" width="90" height="90">
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="apply_time"
+                    label="申请时间"
+                    width="200">
+            </el-table-column>
+            <el-table-column
+                    prop="json.tu1"
+                    label="示例图"
+                    width="300">
+                <template v-slot="scope">
+                    <img :src="'https://iimg.tvpdd.com/'+scope.row.json.tu1" alt="暂无图片" width="90" height="90" v-if="scope.row.json.hasOwnProperty('tu1')" @click="seeimage('https://iimg.tvpdd.com/'+scope.row.json.tu1)">
+                    <img :src="'https://iimg.tvpdd.com/'+scope.row.json.tu2" alt="暂无图片" width="90" height="90" v-if="scope.row.json.hasOwnProperty('tu2')" @click="seeimage('https://iimg.tvpdd.com/'+scope.row.json.tu2)">
+                    <img :src="'https://iimg.tvpdd.com/'+scope.row.json.tu3" alt="暂无图片" width="90" height="90" v-if="scope.row.json.hasOwnProperty('tu2')" @click="seeimage('https://iimg.tvpdd.com/'+scope.row.json.tu3)">
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                    prop="address"
+                    label="信息"
+                    width="500">
+                <template v-slot="scope">
+
+                    <el-descriptions title="">
+
+                        <el-descriptions-item :label="column[index]" v-for="(item,index) in  scope.row.configjson">{{item}}</el-descriptions-item>
+
+                    </el-descriptions>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="json.tu1"
+                    label="状态"
+                    >
+                <template v-slot="scope">
+                    <el-tag type="success" v-if="scope.row.dl_status ==1">待审核</el-tag>
+                    <el-tag type="info"    v-if="scope.row.dl_status ==2">通过</el-tag>
+                    <el-tag type="warning" v-if="scope.row.dl_status ==3">拒绝</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    fixed="right"
+                    label="操作"
+                    width="100">
+                <template slot-scope="scope">
+                    <el-button @click="handleClick(scope.row.id,2)" type="text" size="small" :loading="dl_status ==2">通过</el-button>
+                    <el-button type="text" size="small" @click="handleClick(scope.row.id,3)" :loading="dl_status ==3">拒绝</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </el-row>
+    <br>
+    <el-row :gutter="10">
+        <el-pagination
+                @current-change="currentchange"
+                background
+                style="text-align: center"
+                :current-page="formInline.page"
+                :page-size='size'
+                layout="prev, pager, next"
+                :total="total">
+        </el-pagination>
+    </el-row>
+    <el-dialog
+
+            title="查看图片"
+            :visible.sync="dialogVisible"
+            width="50%"
+            >
+
+          <div>
+              <img :src="img" alt="" style="width: 100%">
+          </div>
+    </el-dialog>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                formInline: {
+                    p_title: '',
+                    limit:10,
+                    page:1,
+                    dl_status:'1',
+                },
+                dialogVisible:false,
+                size:10,
+                total:0,
+                loading: true,
+                tableData: [],
+                column:[],
+                img:'',
+                dl_status:1,
+            }
+        },
+        mounted(){   //页面初始化方法
+           this.fetchOrder();
+        },
+        methods: {
+            seeimage(image){
+                this.dialogVisible=true;
+                this.img=image
+            },
+            currentchange(index){
+                this.loading=true
+                this.formInline.page=index
+                this.fetchOrder();
+            },
+            fetchOrder(){
+                var _this=this;
+                axios({
+                    method: 'post',
+                    url: 'orderCenter',
+                    data: this.formInline
+                }).then(function(response) {
+                    _this.tableData=[];
+                     _this.tableData=response.data.rows
+                    _this.loading=false
+                    _this.column=response.data.column
+                    _this.total=response.data.total;
+                });
+            },
+            handleClick(id,dl_status){
+                var _this=this;
+                var msg=''
+                this.dl_status =dl_status
+                if(dl_status ==3){
+                     msg='你确实要拒绝吗';
+
+                }else{
+                    msg='你确实要同意吗';
+                }
+                this.$confirm(msg, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios({
+                        method: 'post',
+                        url: 'actionOrder',
+                        data: {id:id,dl_status:dl_status}
+                    }).then(function(response) {
+                        _this.dl_status=1;
+                        if(response.data.code ==1){
+                            _this.$message({
+                                message: response.data.msg,
+                                type: 'success'
+                            });
+                            _this.tableData.forEach((item,index)=>{
+                                if(item.id==id){
+                                    Vue.set(_this.tableData[index],'dl_status',dl_status)
+                                }
+                            })
+
+
+                        }else{
+                            _this.$message({
+                                message:  response.data.msg,
+                                type: 'error'
+                            });
+                        }
+
+                    });
+                }).catch(() => {
+
+                });
+            },
+            onSubmit(){
+                this.loading=true
+                this.formInline.page=1;
+                this.fetchOrder();
+            }
+
+        }
+    })
+</script>
+</html>
