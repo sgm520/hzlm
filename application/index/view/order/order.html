@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        html,body,#app{
+            height: 100%;
+        }
+        *{
+            padding: 0px;
+            margin: 0px;
+        }
+        .el-header {
+            background-color: #B3C0D1;
+            color: #333;
+            line-height: 60px;
+        }
+        [v-cloak] {
+            display: none;
+        }
+        .el-aside {
+            color: #333;
+            overflow-y: auto !important;
+        }
+    </style>
+</head>
+<body>
+<div id="app" v-cloak>
+    <el-container style="height: 100%;overflow: hidden; border: 1px solid #eee">
+
+        <el-aside width="200px" style="background-color:#545c64">
+            <el-card  shadow="never" :body-style="{padding: '0px',display:'flex',paddingLeft:'30px',lineHeight: '58px'}">
+                <el-avatar src="https://iimg.tvpdd.com/uploads/20211215/533055db14c37c5e4d9e88e60392ec1e.png">
+
+                </el-avatar>
+                <div class="">蚂蚁汇推 </div>
+            </el-card>
+            <el-menu :default-openeds="['1']"  background-color="#545c64"  active-text-color="#ffd04b" text-color="#fff">
+                <el-submenu index="1">
+                    <template slot="title"><i class="el-icon-message"></i>产品中心</template>
+                    <el-menu-item-group>
+                        <el-menu-item index="1-1" @click="onClick('orderCenter')">订单中心</el-menu-item>
+<!--                        <el-menu-item index="1-2" @click="onClick('productCenter')">产品中心</el-menu-item>-->
+                    </el-menu-item-group>
+                </el-submenu>
+
+            </el-menu>
+        </el-aside>
+        <el-container>
+            <el-header style="text-align: right; font-size: 12px">
+                <el-dropdown>
+                    <i class="el-icon-setting" style="margin-right: 15px"></i>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>查看</el-dropdown-item>
+                        <el-dropdown-item>新增</el-dropdown-item>
+                        <el-dropdown-item>删除</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+                <span>
+<el-dropdown @command="handleCommand">
+  <span class="el-dropdown-link">
+    {$user['mobile']}<i class="el-icon-arrow-down el-icon--right"></i>
+  </span>
+  <el-dropdown-menu slot="dropdown">
+    <el-dropdown-item command="a">退出</el-dropdown-item>
+  </el-dropdown-menu>
+</el-dropdown>
+
+
+
+
+
+                </span>
+            </el-header>
+            <el-main>
+                <iframe frameborder="0" name="Iframe1"  width="100%" :src="iframeurl" height="100%"></iframe>
+            </el-main>
+        </el-container>
+    </el-container>
+
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                activeIndex: '1',
+                iframeurl:"orderCenter"
+            }
+        },
+        methods: {
+            handleCommand(command) {
+                if(command =='a'){
+                    window.location.href='/index/user/logout';
+
+                }
+            },
+            onClick(url){
+                console.log(url)
+               this.iframeurl=url
+            },
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            }
+        }
+    })
+</script>
+</html>

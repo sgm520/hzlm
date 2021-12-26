@@ -2,7 +2,7 @@
 
 namespace app\common\library;
 
-use app\common\model\User;
+use app\common\model\Merchant;
 use app\common\model\UserRule;
 use fast\Random;
 use think\Config;
@@ -98,7 +98,7 @@ class Auth
         }
         $user_id = intval($data['user_id']);
         if ($user_id > 0) {
-            $user = User::get($user_id);
+            $user = Merchant::get($user_id);
             if (!$user) {
                 $this->setError('Account not exist');
                 return false;
@@ -165,14 +165,15 @@ class Auth
             'status'    => 'normal'
         ]);
         $params['password'] = $this->getEncryptPassword($password, $params['salt']);
-        $params = array_merge($params, $extend);
+//        $params = array_merge($params, $extend);
+
 
         //账号注册时需要开启事务,避免出现垃圾数据
         Db::startTrans();
         try {
-            $user = User::create($params, true);
+            $user = Merchant::create($params, true);
 
-            $this->_user = User::get($user->id);
+            $this->_user = Merchant::get($user->id);
 
             //设置Token
             $this->_token = Random::uuid();
@@ -202,7 +203,7 @@ class Auth
     public function login($account, $password)
     {
         $field = Validate::is($account, 'email') ? 'email' : (Validate::regex($account, '/^1\d{10}$/') ? 'mobile' : 'username');
-        $user = User::get([$field => $account]);
+        $user = Merchant::get([$field => $account]);
         if (!$user) {
             $this->setError('Account is incorrect');
             return false;
@@ -287,7 +288,7 @@ class Auth
      */
     public function direct($user_id)
     {
-        $user = User::get($user_id);
+        $user = Merchant::get($user_id);
         if ($user) {
             Db::startTrans();
             try {
@@ -446,14 +447,14 @@ class Auth
      */
     public function delete($user_id)
     {
-        $user = User::get($user_id);
+        $user = Merchant::get($user_id);
         if (!$user) {
             return false;
         }
         Db::startTrans();
         try {
             // 删除会员
-            User::destroy($user_id);
+            Merchant::destroy($user_id);
             // 删除会员指定的所有Token
             Token::clear($user_id);
 
