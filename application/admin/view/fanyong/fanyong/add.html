@@ -25,7 +25,7 @@
     <div class="form-group">
         <label for="c-merchant" class="control-label col-xs-12 col-sm-2">{:__('商户')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <select id="c-merchant" data-rule="required" class="form-control selectpicker" name="row[merchant]">
+            <select id="c-merchant"  class="form-control selectpicker" name="row[merchant]">
                 {foreach name="mechant" item="vo"}
                 <option  value="{$vo.id}" >{$vo.username}</option>
                 {/foreach}
