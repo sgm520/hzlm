@@ -27,9 +27,9 @@ class User extends Frontend
         parent::_initialize();
         $auth = $this->auth;
 
-        if (!Config::get('fastadmin.usercenter')) {
-            $this->error(__('User center already closed'));
-        }
+//        if (!Config::get('fastadmin.usercenter')) {
+//            $this->error(__('User center already closed'));
+//        }
 
         //监听注册登录退出的事件
         Hook::add('user_login_successed', function ($user) use ($auth) {
