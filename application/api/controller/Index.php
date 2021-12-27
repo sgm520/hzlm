@@ -383,7 +383,8 @@ class Index extends Api
                 "price" => $fanyong['money'],
                 "p_title" => $fanyong['name'],
                 "state" => $fanyong['state'],
-                'user_ip'=>$this->get_ip()
+                'user_ip'=>$this->get_ip(),
+                'dl_status'=>1,
             ];
             $in_data = array_merge($data,$get_data);
             $request = db("fanyong_order")->insert($in_data);

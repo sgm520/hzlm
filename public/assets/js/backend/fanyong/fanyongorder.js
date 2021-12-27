@@ -80,7 +80,9 @@ define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tab
                     formatter:Table.api.formatter.flag,
                     custom: {'未通过': "danger", '已结算': "success", '审核中': "info"}
                 },
-                {field: 'status', title: __('状态'),visible:false, searchList: {1: __('审核中'), 3: __('已结算'),2:"未通过"}},
+
+                {field: 'status', title: __('状态'),visible:false,   searchList: {1: __('审核中'), 3: __('已结算'),2:"未通过"}},
+                {field: 'dl_status', title: __('商户审核状态'),visible:true, formatter:Table.api.formatter.flag,  searchList: {1: __('审核中'), 3: __('拒绝'),2:"通过"}},
                 {field: 'time', title: __('申请时间'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
                 {field: 'operate', title: __('Operate'), table: table,width:150,
                     events: Table.api.events.operate,
@@ -150,7 +152,7 @@ define(['jquery', 'bootstrap', 'backend', 'csmtable', 'form','fixedcolumns','tab
                 sortName: 'time',
                 columns:[colums] ,
                 fixedColumns: true,
-                fixedNumber: 14,
+                fixedNumber: 15,
                 stickyHeader: true,
                 clickToSelect: true,
                 treeGrid:false,
