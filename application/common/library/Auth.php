@@ -26,7 +26,7 @@ class Auth
     //默认配置
     protected $config = [];
     protected $options = [];
-    protected $allowFields = ['id', 'username', 'nickname', 'mobile', 'avatar', 'score'];
+    protected $allowFields = ['id', 'username', 'nickname', 'mobile', 'avatar', 'score','agent_id'];
 
     public function __construct($options = [])
     {
@@ -131,21 +131,14 @@ class Auth
      * @param array  $extend   扩展参数
      * @return boolean
      */
-    public function register($username, $password, $email = '', $mobile = '', $extend = [])
+    public function register($username, $password, $mobile = '', $extend = [])
     {
-        // 检测用户名、昵称、邮箱、手机号是否存在
-        if (User::getByUsername($username)) {
-            $this->setError('Username already exist');
-            return false;
-        }
+
         if (User::getByNickname($username)) {
             $this->setError('Nickname already exist');
             return false;
         }
-        if ($email && User::getByEmail($email)) {
-            $this->setError('Email already exist');
-            return false;
-        }
+
         if ($mobile && User::getByMobile($mobile)) {
             $this->setError('Mobile already exist');
             return false;
@@ -155,9 +148,7 @@ class Auth
         $time = time();
 
         $data = [
-            'username' => $username,
             'password' => $password,
-            'email'    => $email,
             'mobile'   => $mobile,
             'level'    => 1,
             'score'    => 0,
@@ -174,7 +165,8 @@ class Auth
             'status'    => 'normal'
         ]);
         $params['password'] = $this->getEncryptPassword($password, $params['salt']);
-        $params = array_merge($params, $extend);
+//        $params = array_merge($params, $extend);
+
 
         //账号注册时需要开启事务,避免出现垃圾数据
         Db::startTrans();
