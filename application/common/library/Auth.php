@@ -2,7 +2,7 @@
 
 namespace app\common\library;
 
-use app\common\model\Merchant;
+use app\common\model\User;
 use app\common\model\UserRule;
 use fast\Random;
 use think\Config;
@@ -26,7 +26,7 @@ class Auth
     //默认配置
     protected $config = [];
     protected $options = [];
-    protected $allowFields = ['id', 'username', 'nickname', 'mobile', 'avatar', 'score','agent_id'];
+    protected $allowFields = ['id', 'username', 'nickname', 'mobile', 'avatar', 'score'];
 
     public function __construct($options = [])
     {
@@ -98,7 +98,7 @@ class Auth
         }
         $user_id = intval($data['user_id']);
         if ($user_id > 0) {
-            $user = Merchant::get($user_id);
+            $user = User::get($user_id);
             if (!$user) {
                 $this->setError('Account not exist');
                 return false;
@@ -131,14 +131,21 @@ class Auth
      * @param array  $extend   扩展参数
      * @return boolean
      */
-    public function register($username, $password, $mobile = '', $extend = [])
+    public function register($username, $password, $email = '', $mobile = '', $extend = [])
     {
-
+        // 检测用户名、昵称、邮箱、手机号是否存在
+        if (User::getByUsername($username)) {
+            $this->setError('Username already exist');
+            return false;
+        }
         if (User::getByNickname($username)) {
             $this->setError('Nickname already exist');
             return false;
         }
-
+        if ($email && User::getByEmail($email)) {
+            $this->setError('Email already exist');
+            return false;
+        }
         if ($mobile && User::getByMobile($mobile)) {
             $this->setError('Mobile already exist');
             return false;
@@ -148,7 +155,9 @@ class Auth
         $time = time();
 
         $data = [
+            'username' => $username,
             'password' => $password,
+            'email'    => $email,
             'mobile'   => $mobile,
             'level'    => 1,
             'score'    => 0,
@@ -165,15 +174,14 @@ class Auth
             'status'    => 'normal'
         ]);
         $params['password'] = $this->getEncryptPassword($password, $params['salt']);
-//        $params = array_merge($params, $extend);
-
+        $params = array_merge($params, $extend);
 
         //账号注册时需要开启事务,避免出现垃圾数据
         Db::startTrans();
         try {
-            $user = Merchant::create($params, true);
+            $user = User::create($params, true);
 
-            $this->_user = Merchant::get($user->id);
+            $this->_user = User::get($user->id);
 
             //设置Token
             $this->_token = Random::uuid();
@@ -203,7 +211,7 @@ class Auth
     public function login($account, $password)
     {
         $field = Validate::is($account, 'email') ? 'email' : (Validate::regex($account, '/^1\d{10}$/') ? 'mobile' : 'username');
-        $user = Merchant::get([$field => $account]);
+        $user = User::get([$field => $account]);
         if (!$user) {
             $this->setError('Account is incorrect');
             return false;
@@ -288,7 +296,7 @@ class Auth
      */
     public function direct($user_id)
     {
-        $user = Merchant::get($user_id);
+        $user = User::get($user_id);
         if ($user) {
             Db::startTrans();
             try {
@@ -447,14 +455,14 @@ class Auth
      */
     public function delete($user_id)
     {
-        $user = Merchant::get($user_id);
+        $user = User::get($user_id);
         if (!$user) {
             return false;
         }
         Db::startTrans();
         try {
             // 删除会员
-            Merchant::destroy($user_id);
+            User::destroy($user_id);
             // 删除会员指定的所有Token
             Token::clear($user_id);
 
