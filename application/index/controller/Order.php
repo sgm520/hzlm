@@ -2,17 +2,19 @@
 
 namespace app\index\controller;
 
-use app\common\controller\Frontend;
 use app\common\model\Fanyong;
 use app\common\model\Fanyongorder;
+use think\Controller;
 use think\Db;
+use think\Request;
 
-class Order extends Frontend
+class Order extends Base
 {
 
     protected $noNeedLogin = [];
     protected $noNeedRight = '*';
     protected $layout = false;
+
 
 
     public function index()
@@ -66,13 +68,14 @@ class Order extends Frontend
     }
 
     public  function order(){
-        $this->assign('user',$this->auth->getUser());
+        $this->assign('user',session('merchant'));
         return $this->view->fetch();
     }
 
     public function orderCenter(){
+        $user=session('merchant');
         if($this->request->post()){
-            $order_id=Db::name('fanyong')->where('merchant',$this->auth->id)->column('id','id');
+            $order_id=Db::name('fanyong')->where('merchant',$user['id'])->column('id','id');
             $map['p_id'] = ['in',$order_id];
             $limit=$this->request->post('limit',10);
             $this->model = new \app\common\model\Fanyongorder();
@@ -125,10 +128,14 @@ class Order extends Frontend
             ]);
             $this->error('');
         }
-        return json([
-            'code'=>1,
-            'msg'=>'成功'
-        ]);
+        $order->dl_status=$dl_status;
+        if($order->save()){
+            return json([
+                'code'=>1,
+                'msg'=>'成功'
+            ]);
+        }
+
     }
 
 }
