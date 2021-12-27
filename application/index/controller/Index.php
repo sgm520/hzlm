@@ -12,7 +12,7 @@ class Index extends Base
 
     public function index()
     {
-
+        $this->redirect('index/order/order');
         return $this->view->fetch();
     }
 
