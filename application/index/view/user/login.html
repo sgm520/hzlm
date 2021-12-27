@@ -1,93 +1,243 @@
-<div id="content-container" class="container">
-    <div class="user-section login-section">
-        <div class="logon-tab clearfix"><a class="active">{:__('Sign in')}</a>
-        </div>
-        <div class="login-main">
-            <form name="form" id="login-form" class="form-vertical" method="POST" action="">
-                <input type="hidden" name="url" value="{$url|htmlentities}"/>
-                {:token()}
-                <div class="form-group">
-                    <label class="control-label" for="account">{:__('Account')}</label>
-                    <div class="controls">
-                        <input class="form-control input-lg" id="account" type="text" name="account" value="" data-rule="required" placeholder="{:__('Email/Mobile/Username')}" autocomplete="off">
-                        <div class="help-block"></div>
-                    </div>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>网站后台管理系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!--可无视-->
+    <link rel="stylesheet" href="__CDN__/assets/css/bootstrap_index.css">
+    <link rel="stylesheet" href="__CDN__/assets/libs/fastadmin-layer/src/theme/moon/style.css">
+    <link rel="stylesheet" href="__CDN__/assets/element/index.css">
+   <style>
+       body{
+           background: url(/./assets/img/banner.jpg);
+           background-attachment: fixed;
+           background-repeat: no-repeat;
+           background-position: center;
+           background-size: 100%;
+       }
+       blockquote, q {
+           quotes: none;
+       }
+       blockquote:before, blockquote:after, q:before, q:after {
+           content: '';
+           content: none;
+       }
+       table {
+           border-collapse: collapse;
+           border-spacing: 0;
+       }
+       /* start editing from here */
+       a {
+           text-decoration: none;
+       }
+       img {
+           max-width: 100%;
+       }
+       /*end reset*/
+       /****-----start-body----****/
+       body {
+           background-color: #0091e6;
+       }
+       h1 {
+           font-size: 2.4em;
+           padding-bottom: 28px;
+           color: #fff;
+           text-align: center;
+       }
+       h2 {
+           font-size: 1.5em;
+           padding-bottom: 28px;
+           color: #0091e6;
+           text-align: center;
+       }
+       .login {
+           padding: 2em 0;
+       }
+       .inset {
+           position: relative;
+           background: #fff;
+           padding: 2.5em;
+           border-radius: 0.3em;
+           -webkit-border-radius: 0.3em;
+           -o-border-radius: 0.3em;
+           -moz-border-radius: 0.3em;
+           box-shadow: 0px 0px 15px #545454;
+       }
+       form span {
+           display: block;
+           font-size: 1.0em;
+           color: #333;
+           font-weight: 400;
+       }
+       input[type="text"], input[type="password"] , select{
+           padding: 9px;
+           width: 93.4%;
+           font-size: 1.1em;
+           margin: 3px 0px 25px;
+           color: #666666;
+           background: #f0f0f0;
+           border: none;
+           font-weight:400;
+           outline: none;
+           -webkit-transition: all 0.3s ease-out;
+           -moz-transition: all 0.3s ease-out;
+           -ms-transition: all 0.3s ease-out;
+           -o-transition: all 0.3s ease-out;
+           transition: all 0.3s ease-out;
+           border-radius: 0.2em;
+           -webkit-border-radius: 0.2em;
+           -o-border-radius: 0.2em;
+           -moz-border-radius: 0.2em;
+       }
+       input[type="text"]:hover, input[type="Password"]:hover, #active {
+           border: none;
+           outline: none;
+       }
+       .sign {
+           padding: 10px 0 0;
+           text-align: center;
+       }
+       .submit {
+           margin-right:11px;
+           background:#0091e6;
+           border: none;
+           outline: none;
+           padding:8px 30px;
+           cursor: pointer;
+           color: #FFF;
+           font-size: 0.9em;
+           border-radius: .3em;
+           -webkit-border-radius: .3em;
+           -moz-border-radius: .3em;
+           -o-border-radius: .3em;
+           transition: 0.5s all;
+           -webkit-transition: 0.5s all;
+           -moz-transition: 0.5s all;
+           -o-transition: 0.5s all;
+           font-weight: 600;
+           margin: 0 auto;
+       }
+       .submit:hover {
+           background: #C5C5C5;
+       }
+       .rzm{ position:relative}
+       .rzm img{ position: absolute;top:0px;right:0px; height:45px;}
+
+       /*----start-responsive design-----*/
+       h1 {
+           font-size: 2.2em;
+       }
+       }
+       @media (max-width:991px) {
+           h1 {
+               font-size: 2em;
+           }
+       }
+
+       h1 {
+           font-size: 2.1em;
+       }
+       }
+       .inset {
+           padding: 2em;
+       }
+       h1 {
+           font-size: 1.9em;
+       }
+       .login {
+           padding: 2em 0 0;
+       }
+       .el-button--primary span{
+           color: white !important;
+       }
+   </style>
+    <!--主要样式-->
+<script src="__CDN__/assets/element/vue.js"></script>
+<script src="__CDN__/assets/element/index.js"></script>
+<script src="__CDN__/assets/element/axios.js"></script>
+
+
+
+</head>
+<body>
+
+<div class="container" align="center" id="app">
+    <div class="col-md-6" style="margin-top: 20%;">
+        <div class="inset">
+            <form name="login" id="login" method="post"  onSubmit="return false;">
+                <input type="hidden" name="enews" value="login">
+                <div>
+                    <h2>后台管理系统</h2>
+                    <span style="text-align: left;text-indent: 0.4em;"><label>用户名</label></span>
+                    <span><input type="text" name="username" class="textbox"  v-model="form.account"></span>
                 </div>
-                <div class="form-group">
-                    <label class="control-label" for="password">{:__('Password')}</label>
-                    <div class="controls">
-                        <input class="form-control input-lg" id="password" type="password" name="password" data-rule="required;password" placeholder="{:__('Password')}" autocomplete="off">
-                    </div>
+                <div>
+                    <span style="text-align: left;text-indent: 0.4em;"><label>密码</label></span>
+                    <span><input  name="password" type="password" class="password"  v-model="form.password"> </span>
                 </div>
-                <div class="form-group">
-                    <div class="controls">
-                        <div class="checkbox inline">
-                            <label>
-                                <input type="checkbox" name="keeplogin" checked="checked" value="1"> {:__('Keep login')}
-                            </label>
-                        </div>
-                        <div class="pull-right"><a href="javascript:;" class="btn-forgot">{:__('Forgot password')}</a></div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">{:__('Sign in')}</button>
+                <div class="sign">
+                    <el-button @click="submit" type="primary" style="color: white">立即登录</el-button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<script type="text/html" id="resetpwdtpl">
-    <form id="resetpwd-form" class="form-horizontal form-layer" method="POST" action="{:url('api/user/resetpwd')}">
-        <div class="form-body">
-            <input type="hidden" name="action" value="resetpwd"/>
-            <div class="form-group">
-                <label class="control-label col-xs-12 col-sm-3">{:__('Type')}:</label>
-                <div class="col-xs-12 col-sm-8">
-                    <div class="radio">
-                        <label for="type-email"><input id="type-email" checked="checked" name="type" data-send-url="{:url('api/ems/send')}" data-check-url="{:url('api/validate/check_ems_correct')}" type="radio" value="email"> {:__('Reset password by email')}</label>
-                        <label for="type-mobile"><input id="type-mobile" name="type" type="radio" data-send-url="{:url('api/sms/send')}" data-check-url="{:url('api/validate/check_sms_correct')}" value="mobile"> {:__('Reset password by mobile')}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group" data-type="email">
-                <label for="email" class="control-label col-xs-12 col-sm-3">{:__('Email')}:</label>
-                <div class="col-xs-12 col-sm-8">
-                    <input type="text" class="form-control" id="email" name="email" value="" data-rule="required(#type-email:checked);email;remote({:url('api/validate/check_email_exist')}, event=resetpwd, id=0)" placeholder="">
-                    <span class="msg-box"></span>
-                </div>
-            </div>
-            <div class="form-group hide" data-type="mobile">
-                <label for="mobile" class="control-label col-xs-12 col-sm-3">{:__('Mobile')}:</label>
-                <div class="col-xs-12 col-sm-8">
-                    <input type="text" class="form-control" id="mobile" name="mobile" value="" data-rule="required(#type-mobile:checked);mobile;remote({:url('api/validate/check_mobile_exist')}, event=resetpwd, id=0)" placeholder="">
-                    <span class="msg-box"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="captcha" class="control-label col-xs-12 col-sm-3">{:__('Captcha')}:</label>
-                <div class="col-xs-12 col-sm-8">
-                    <div class="input-group">
-                        <input type="text" name="captcha" class="form-control" data-rule="required;length(4);integer[+];remote({:url('api/validate/check_ems_correct')}, event=resetpwd, email:#email)"/>
-                        <span class="input-group-btn" style="padding:0;border:none;">
-                            <a href="javascript:;" class="btn btn-info btn-captcha" data-url="{:url('api/ems/send')}" data-type="email" data-event="resetpwd">{:__('Send verification code')}</a>
-                        </span>
-                    </div>
-                    <span class="msg-box"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="newpassword" class="control-label col-xs-12 col-sm-3">{:__('New password')}:</label>
-                <div class="col-xs-12 col-sm-8">
-                    <input type="password" class="form-control" id="newpassword" name="newpassword" value="" data-rule="required;password" placeholder="">
-                    <span class="msg-box"></span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group form-footer">
-            <label class="control-label col-xs-12 col-sm-3"></label>
-            <div class="col-xs-12 col-sm-8">
-                <button type="submit" class="btn btn-md btn-info">{:__('Ok')}</button>
-            </div>
-        </div>
-    </form>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                form:{
+                    account: '',
+                    password: '',
+                }
+            }
+        },
+        methods:{
+            submit(){
+                if(this.form.account ==''){
+                    this.$message.error('账号不能为空');
+                    return  true;
+                }
+
+                if(this.form.password ==''){
+                    this.$message.error('密码不能为空');
+                }
+                var _this=this;
+                axios({
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    transformRequest: [
+                        function (data) {
+                            let ret = ''
+                            for (let it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                            }
+                            ret = ret.substring(0, ret.lastIndexOf('&'));
+                            return ret
+                        }
+                    ],
+                    url: '{:url("user/login")}',
+                    data: this.form
+                }).then(function(response) {
+
+                     if(response.data.code ==1){
+                         window.location.href='{:url("order/order")}'
+                     }else{
+                         _this.$message.error(response.data.msg);
+                     }
+                });
+            }
+        }
+    })
 </script>
+
+</body>
+</html>

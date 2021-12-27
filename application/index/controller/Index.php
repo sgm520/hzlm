@@ -2,9 +2,8 @@
 
 namespace app\index\controller;
 
-use app\common\controller\Frontend;
 
-class Index extends Frontend
+class Index extends Base
 {
 
     protected $noNeedLogin = '*';
@@ -13,6 +12,7 @@ class Index extends Frontend
 
     public function index()
     {
+
         return $this->view->fetch();
     }
 
