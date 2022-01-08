@@ -101,9 +101,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 return{
                                     css:{
                                         "max-width":"450px !important",
-                                        "overflow":"hidden",
-                                        "white-space":"nowrap",
-                                        "text-overflow":"ellipsis",
+                                        "overflow-y":"auto",
+                                        "width": "200px",
                                         "display":"block",
                                     }
                                 }
