@@ -27,7 +27,22 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'parent_id', title: __('上级'), sortable: true,operate: 'LIKE'},
-                        {field: 'parent_path', title: __('上上级'), sortable: true,operate: 'LIKE',cellStyle:Controller.api.formatter.css},
+                        {field: 'parent_path', title: __('上上级'), operate: false,
+                            formatter : function(value, row, index, field){
+                                return "<span style='display: block;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;' title='" + row.parent_path + "'>" + value + "</span>";
+                            },
+                            cellStyle : function(value, row, index, field){
+                                return {
+                                    css: {
+                                        "white-space": "nowrap",
+                                        "text-overflow": "ellipsis",
+                                        "overflow": "hidden",
+                                        "max-width":"150px"
+                                    }
+                                };
+                            }
+
+                        },
                         {field: 'agent_id', title: __('管理员'), sortable: true,operate: 'LIKE'},
                         {field: 'invite_code', title: __('邀请码'),operate: 'LIKE'},
                         // {field: 'username', title: __('Username'), operate: 'LIKE'},
