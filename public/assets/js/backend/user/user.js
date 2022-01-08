@@ -27,7 +27,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'parent_id', title: __('上级'), sortable: true,operate: 'LIKE'},
-                        {field: 'parent_path', title: __('上上级'), sortable: true,operate: 'LIKE',width:'100'},
+                        {field: 'parent_path', title: __('上上级'), sortable: true,operate: 'LIKE',cellStyle:Controller.api.formatter.css},
                         {field: 'agent_id', title: __('管理员'), sortable: true,operate: 'LIKE'},
                         {field: 'invite_code', title: __('邀请码'),operate: 'LIKE'},
                         // {field: 'username', title: __('Username'), operate: 'LIKE'},
@@ -95,8 +95,22 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         api: {
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
-            }
-        }
+            },
+            formatter:{
+                css:function(){
+                                return{
+                                    css:{
+                                        "max-width":"450px !important",
+                                        "overflow":"hidden",
+                                        "white-space":"nowrap",
+                                        "text-overflow":"ellipsis",
+                                        "display":"block",
+                                    }
+                                }
+                }
+}
+        },
+
     };
     return Controller;
 });
